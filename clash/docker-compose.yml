@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  server:
+    container_name: clash
+    image: dreamacro/clash:dev
+    restart: always
+    volumes:
+    - /Users/hd/clash/config.yaml:/root/.config/clash/config.yaml
+    - /Users/hd/clash/ui:/ui
+    networks:
+      default:
+        ipv4_address: 192.168.1.7
+    ports:
+    - "1080:1080"
+    - "10800:10800"
+
+networks:
+  default:
+    external: true
+    name: lanet

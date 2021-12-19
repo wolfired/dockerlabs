@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  server:
+    container_name: coredns
+    image: coredns/coredns:latest
+    command: -conf /cfgs/Corefile
+    restart: always
+    volumes:
+    - /Users/hd/coredns/cfgs:/cfgs
+    - /Users/hd/coredns/zones:/zones
+    networks:
+      default:
+        ipv4_address: 192.168.1.2
+    ports:
+    - "192.168.180.25:53:53/udp"
+    - "192.168.180.25:53:53/tcp"
+    - "5300:5300"
+
+networks:
+  default:
+    external: true
+    name: lanet

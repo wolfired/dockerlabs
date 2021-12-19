@@ -1,0 +1,30 @@
+. {
+ hosts {
+  192.168.180.25 help.wolfired.com
+
+  192.168.180.25 coredns.wolfired.com
+
+  192.168.180.25 gitea.wolfired.com
+  
+  192.168.180.25 drone.wolfired.com
+
+  192.168.180.25 clash.wolfired.com
+
+  192.168.180.25 runner1.wolfired.com
+  192.168.180.25 runner2.wolfired.com
+  192.168.73.219 runner3.wolfired.com
+
+  192.168.73.221 ssh.buildervm.com
+  192.168.180.25 ssh.mac.com
+
+  192.168.73.219 jenkins.builder.com
+
+  192.168.100.7 svn1.cq666.com
+
+  fallthrough
+ }
+ forward . 192.168.100.8 223.5.5.5 223.6.6.6
+ health :5300
+ log
+ errors
+}
