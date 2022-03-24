@@ -5,6 +5,8 @@ services:
     container_name: clash
     image: dreamacro/clash:dev
     restart: always
+    environment:
+    - TZ=Asia/Shanghai
     volumes:
     - /Users/hd/clash/config.yaml:/root/.config/clash/config.yaml
     - /Users/hd/clash/ui:/ui

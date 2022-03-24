@@ -5,6 +5,8 @@ services:
     container_name: unity
     image: unityci/editor:ubuntu-2021.2.7f1-windows-mono-0.15.0
     restart: always
+    environment:
+    - TZ=Asia/Shanghai
     volumes:
     - /Users/hd/gameci:/gameci
     networks:

@@ -5,6 +5,8 @@ services:
     image: gitea/gitea
     container_name: gitea
     restart: always
+    environment:
+    - TZ=Asia/Shanghai
     volumes:
     - /Users/hd/gitea/data:/data
     - /etc/timezone:/etc/timezone:ro

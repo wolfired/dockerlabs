@@ -5,6 +5,8 @@ services:
     container_name: nginx
     image: nginx
     restart: always
+    environment:
+    - TZ=Asia/Shanghai
     volumes:
     - /Users/hd/nginx/html:/usr/share/nginx/html:ro
     - /Users/hd/nginx/conf:/etc/nginx:ro

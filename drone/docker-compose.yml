@@ -6,6 +6,7 @@ services:
     image: drone/drone
     restart: always
     environment:
+    - TZ=Asia/Shanghai
     - DRONE_GITEA_SERVER=https://gitea.wolfired.com
     - DRONE_GITEA_CLIENT_ID=295ebfa9-3635-4bfc-8aa4-ac1abe7d383c
     - DRONE_GITEA_CLIENT_SECRET=FPbeSZD4UiojOQfwJevjt6c2CKG0KyngCYNs48HviauG
@@ -28,6 +29,7 @@ services:
     image: drone/drone-runner-docker
     restart: always
     environment:
+    - TZ=Asia/Shanghai
     - DRONE_RPC_PROTO=https
     - DRONE_RPC_HOST=drone.wolfired.com
     - DRONE_RPC_SECRET=83630ed531cc42a8ce6162f9a19bdeb0
