@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  server:
+  gitea:
     image: gitea/gitea
     container_name: gitea
     restart: always

@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  server:
+  drone_server:
     container_name: drone_server
     image: drone/drone
     restart: always

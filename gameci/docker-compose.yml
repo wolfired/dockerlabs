@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  builder:
+  unity_2021_2_7f1_windows_mono_0_15_0:
     container_name: unity
     image: unityci/editor:ubuntu-2021.2.7f1-windows-mono-0.15.0
     restart: always

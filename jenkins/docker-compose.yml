@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:latest
+    restart: always
+    volumes:
+    - /Users/hd/jenkins_docker/data:/var/jenkins_home
+    - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - TZ=Asia/Shanghai
+      - JAVA_OPTS='-Duser.timezone=Asia/Shanghai'
+    user: 0:0
+    dns:
+    - 192.168.1.2
+    networks:
+      default:
+        ipv4_address: 192.168.1.10
+    # command: bash
+    ports:
+    - "58080:8080"
+    - "50000:50000"
+
+networks:
+  default:
+    external: true
+    name: lanet

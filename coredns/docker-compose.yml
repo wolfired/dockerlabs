@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  server:
+  coredns:
     container_name: coredns
     image: coredns/coredns:latest
     command: -conf /cfgs/Corefile
