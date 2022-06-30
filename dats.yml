@@ -50,5 +50,5 @@ services:
     ip: '192.168.1.8'
     port_web_guest: 80
     port_web_host: 1800
-    port_acc_guest: 1801
-    port_acc_host: 1801
+    port_acc_guest: 10080
+    port_acc_host: 10080
