@@ -1,0 +1,46 @@
+dns: '192.168.1.2'
+services:
+  coredns:
+    enable: 1
+    name: 'coredns'
+    ip: '192.168.1.2'
+    port_udp_guest: 53
+    port_udp_host: 53
+    port_tcp_guest: 53
+    port_tcp_host: 53
+    port_health_guest: 5300
+    port_health_host: 5300
+  nginx:
+    enable: 1
+    name: 'nginx'
+    ip: '192.168.1.3'
+    port_web_guest: 80
+    port_web_host: 80
+    port_ssl_guest: 443
+    port_ssl_host: 443
+  gitea:
+    enable: 1
+    name: 'gitea'
+    ip: '192.168.1.4'
+    port_ssh_guest: 22
+    port_ssh_host: 22
+    port_web_guest: 80
+    port_web_host: 1400
+  drone:
+    enable: 1
+    name: 'drone'
+    ip: '192.168.1.5'
+    port_web_guest: 80
+    port_web_host: 1500
+  clash:
+    enable: 0
+    name: 'clash'
+    ip: '192.168.1.6'
+    port_proxy_guest: 1080
+    port_proxy_host: 1080
+    port_web_guest: 80
+    port_web_host: 1600
+  jenkins:
+    enable: 0
+    name: 'jenkins'
+    ip: '192.168.1.7'

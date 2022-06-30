@@ -1,5 +1,10 @@
 version: "3"
 
+networks:
+  default:
+    external: true
+    name: lanet
+
 services:
   clash:
     container_name: clash
@@ -8,16 +13,13 @@ services:
     environment:
     - TZ=Asia/Shanghai
     volumes:
-    - /Users/hd/clash/config.yaml:/root/.config/clash/config.yaml
-    - /Users/hd/clash/ui:/ui
+    - {{host_workspace}}/clash/config.yaml:/root/.config/clash/config.yaml
+    - {{host_workspace}}/clash/ui:/ui
+    dns:
+    - {{guest_dns_ip}}
     networks:
       default:
-        ipv4_address: 192.168.1.7
+        ipv4_address: {{guest_ip}}
     ports:
-    - "1080:1080"
-    - "10800:10800"
-
-networks:
-  default:
-    external: true
-    name: lanet
+    # - "{{port_proxy_host}}:{{port_proxy_guest}}"
+    # - "{{port_web_host}}:{{port_web_guest}}"

@@ -1,5 +1,10 @@
 version: "3"
 
+networks:
+  default:
+    external: true
+    name: lanet
+
 services:
   coredns:
     container_name: coredns
@@ -9,17 +14,12 @@ services:
     environment:
     - TZ=Asia/Shanghai
     volumes:
-    - /Users/hd/coredns/cfgs:/cfgs
-    - /Users/hd/coredns/zones:/zones
+    - {{host_workspace}}/coredns/cfgs:/cfgs
+    - {{host_workspace}}/coredns/zones:/zones
     networks:
       default:
-        ipv4_address: 192.168.1.2
+        ipv4_address: {{guest_ip}}
     ports:
-    - "192.168.180.25:53:53/udp"
-    - "192.168.180.25:53:53/tcp"
-    - "5300:5300"
-
-networks:
-  default:
-    external: true
-    name: lanet
+    - "{{host_ip}}:{{port_udp_host}}:{{port_udp_guest}}/udp"
+    - "{{host_ip}}:{{port_tcp_host}}:{{port_tcp_guest}}/tcp"
+    # - "{{host_ip}}:{{port_health_host}}:{{port_health_guest}}"
