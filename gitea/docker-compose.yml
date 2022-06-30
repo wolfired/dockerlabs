@@ -10,7 +10,6 @@ services:
     image: gitea/gitea
     container_name: gitea
     restart: always
-    environment:
     volumes:
     - {{host_workspace}}/gitea/data:/data
     - /etc/timezone:/etc/timezone:ro

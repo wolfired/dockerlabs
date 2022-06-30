@@ -10,7 +10,6 @@ services:
     container_name: drone_server
     image: drone/drone
     restart: always
-    environment:
     volumes:
     - {{host_workspace}}/drone:/data
     dns:

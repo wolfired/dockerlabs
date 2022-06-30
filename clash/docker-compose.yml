@@ -10,7 +10,6 @@ services:
     container_name: clash
     image: dreamacro/clash:dev
     restart: always
-    environment:
     volumes:
     - {{host_workspace}}/clash/config.yaml:/root/.config/clash/config.yaml
     - {{host_workspace}}/clash/ui:/ui
