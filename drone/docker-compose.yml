@@ -17,7 +17,7 @@ services:
     networks:
       default:
         ipv4_address: {{guest_ip}}
-    ports:
+    # ports:
     # - "{{port_web_host}}:{{port_web_guest}}"
 
 #   runner:
