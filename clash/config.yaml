@@ -5,5 +5,5 @@ allow-lan: true
 mode: Rule
 log-level: info
 external-controller: 0.0.0.0:{{port_web_guest}}
-external-ui: /yacd/public
+external-ui: /ui
 secret: admin

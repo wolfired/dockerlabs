@@ -14,7 +14,7 @@ services:
       TZ:
     volumes:
     - {{host_workspace}}/clash/config.yaml:/root/.config/clash/config.yaml
-    - {{host_workspace}}/clash/yacd/public:/yacd/public
+    - {{host_workspace}}/clash/yacd/public:/ui
     dns:
     - {{guest_dns_ip}}
     networks:
