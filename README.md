@@ -10,7 +10,7 @@ sudo docker network create --gateway 192.168.1.1 --subnet 192.168.1.0/24 lanet
 bash ./setup.sh $HOME/workspace_docker `ip -o route get to 223.5.5.5 | grep -oP '(?<=src )\d+\.\d+\.\d+\.\d+'`
 
 # 一键启动
-for value in nginx coredns; do
+for value in coredns nginx; do
     pushd $HOME/workspace_docker/$value 1>/dev/null 2>&1 && \
     docker-compose up -d && \
     popd 1>/dev/null 2>&1
