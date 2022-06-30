@@ -144,36 +144,36 @@ function handle_nginx() {
             continue
         fi
 
-            sed -i "s#{{guest_name}}#$guest_name#g" $guest_workspace/$guest_name.conf
-            sed -i "s#{{guest_ip}}#$guest_ip#g" $guest_workspace/$guest_name.conf
+        cp -vu $guest_workspace/$guest_name.conf $host_workspace/$target_service/conf/conf.d/
+
+        sed -i "s#{{guest_name}}#$guest_name#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
+        sed -i "s#{{guest_ip}}#$guest_ip#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
 
         case $guest_name in
         coredns)
             local port_health_guest=`yq e ".services.$service.port_health_guest" ./dats.yml`
 
-            sed -i "s#{{port_health_guest}}#$port_health_guest#g" $guest_workspace/$guest_name.conf
+            sed -i "s#{{port_health_guest}}#$port_health_guest#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
             ;;
         gitea)
             local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
 
-            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/$guest_name.conf
+            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
             ;;
         drone)
             local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
 
-            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/$guest_name.conf
+            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
             ;;
         clash)
             local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
 
-            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/$guest_name.conf
+            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
             ;;
         *)
             echo 'nothing to do'
             ;;
         esac
-
-        cp -vu $guest_workspace/$guest_name.conf $host_workspace/$target_service/conf/conf.d/
     done
 
     mkdir -p $host_workspace/$target_service/conf/encrypt/archive
