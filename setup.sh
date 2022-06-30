@@ -91,6 +91,9 @@ function main() {
 
             sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/docker-compose.yml
             sed -i "s#{{port_web_host}}#$port_web_host#g" $guest_workspace/docker-compose.yml
+
+            sed -i "s#{{port_proxy_guest}}#$port_proxy_guest#g" $guest_workspace/config.yaml
+            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/config.yaml
             ;;
         *)
             echo 'nothing to do'
@@ -100,7 +103,9 @@ function main() {
 }
 
 function handle_nginx() {
-    local enable=`yq e ".services.nginx.enable" ./dats.yml`
+    local service=nginx
+
+    local enable=`yq e ".services.$service.enable" ./dats.yml`
     if (( 0 == $enable )); then
         return
     fi
@@ -110,7 +115,7 @@ function handle_nginx() {
         local guest_ip=`yq e ".services.$service.ip" ./dats.yml`
         local enable=`yq e ".services.$service.enable" ./dats.yml`
 
-        if [[ 'nginx' == $guest_name ]]; then
+        if [[ $$service == $guest_name ]]; then
             continue
         fi
 
@@ -159,24 +164,43 @@ function handle_nginx() {
             ;;
         esac
 
-        cp -vu $guest_workspace/$guest_name.conf $host_workspace/nginx/conf/conf.d/
+        cp -vu $guest_workspace/$guest_name.conf $host_workspace/$service/conf/conf.d/
     done
 
-    mkdir -p $host_workspace/nginx/conf/encrypt/archive
-    find $host_workspace/nginx/conf/encrypt/archive -mindepth 1 -maxdepth 1 -print | while read -r line; do
+    mkdir -p $host_workspace/$service/conf/encrypt/archive
+    find $host_workspace/$service/conf/encrypt/archive -mindepth 1 -maxdepth 1 -print | while read -r line; do
         local dir_name=`basename $line`
-        mkdir -p $host_workspace/nginx/conf/encrypt/live/$dir_name
+        mkdir -p $host_workspace/$service/conf/encrypt/live/$dir_name
 
         local ssl_files=(cert chain fullchain privkey)
         for ssl_file in ${ssl_files[@]}; do
             local target_name=$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)' | grep -oP '[a-z]+')
 
-            pushd $host_workspace/nginx/conf/encrypt/live/$dir_name 1>/dev/null 2>&1 && \
-            ln -sf ../../archive/$dir_name/$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_workspace/nginx/conf/encrypt/live/$dir_name/$target_name.pem && \
+            pushd $host_workspace/$service/conf/encrypt/live/$dir_name 1>/dev/null 2>&1 && \
+            ln -sf ../../archive/$dir_name/$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_workspace/$service/conf/encrypt/live/$dir_name/$target_name.pem && \
             popd 1>/dev/null 2>&1
         done
     done
 }
 
+function handle_clash() {
+    local service=clash
+
+    local enable=`yq e ".services.$service.enable" ./dats.yml`
+    if (( 0 == $enable )); then
+        return
+    fi
+
+    pushd $host_workspace/$service 1>/dev/null 2>&1
+
+    git clone --depth 1 https://github.com/haishanh/yacd.git && \
+    npm i -g pnpm && \
+    pnpm i && \
+    pnpm build
+
+    popd
+}
+
 main
 handle_nginx
+handle_clash
