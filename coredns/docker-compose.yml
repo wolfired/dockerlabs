@@ -11,7 +11,6 @@ services:
     image: coredns/coredns:latest
     command: -conf /cfgs/Corefile
     restart: always
-    environment:
     volumes:
     - {{host_workspace}}/coredns/cfgs:/cfgs
     - {{host_workspace}}/coredns/zones:/zones
