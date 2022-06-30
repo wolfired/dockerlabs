@@ -20,6 +20,6 @@ services:
     networks:
       default:
         ipv4_address: {{guest_ip}}
-    # ports:
-    # - "{{port_proxy_host}}:{{port_proxy_guest}}"
+    ports:
+    - "{{port_proxy_host}}:{{port_proxy_guest}}"
     # - "{{port_web_host}}:{{port_web_guest}}"
