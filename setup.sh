@@ -157,10 +157,11 @@ function handle_nginx() {
 
         local ssl_files=(cert chain fullchain privkey)
         for ssl_file in ${ssl_files[@]}; do
-            pushd $host_workspace/nginx/conf/encrypt/live/$dir_name
             local target_name=$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)' | grep -oP '[a-z]+')
-            ln -sf ../../archive/$dir_name/$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_workspace/nginx/conf/encrypt/live/$dir_name/$target_name.pem
-            popd
+
+            pushd $host_workspace/nginx/conf/encrypt/live/$dir_name 1>/dev/null 2>&1 && \
+            ln -sf ../../archive/$dir_name/$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_workspace/nginx/conf/encrypt/live/$dir_name/$target_name.pem && \
+            popd 1>/dev/null 2>&1
         done
     done
 }
