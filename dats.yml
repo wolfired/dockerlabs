@@ -24,7 +24,7 @@ services:
     ip: '192.168.1.4'
     port_ssh_guest: 22
     port_ssh_host: 22
-    port_web_guest: 80
+    port_web_guest: 3000
     port_web_host: 1400
   drone:
     enable: 1
