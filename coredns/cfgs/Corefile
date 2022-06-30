@@ -4,7 +4,7 @@
   192.168.100.168 coredns.wolfired.com
   192.168.100.168 gitea.wolfired.com
   192.168.100.168 drone.wolfired.com
-  192.168.180.25 clash.wolfired.com
+  192.168.100.168 clash.wolfired.com
   192.168.180.25 acc.wolfired.com
   192.168.180.25 jenkins.wolfired.com
 
