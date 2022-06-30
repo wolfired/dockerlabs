@@ -149,6 +149,18 @@ function handle_nginx() {
 
         cp -u $guest_workspace/$guest_name.conf $host_workspace/nginx/conf/conf.d/
     done
+
+    mkdir -p $host_workspace/nginx/conf/encrypt/archive
+    find $host_workspace/nginx/conf/encrypt/archive -mindepth 1 -maxdepth 1 -print | while read -r line; do
+        local dir_name=`basename $line`
+        mkdir -p $host_workspace/nginx/conf/encrypt/live/$dir_name
+
+        local ssl_files=(cert chain fullchain privkey)
+        for ssl_file in ${ssl_files[@]}; do
+            local target_name=$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)' | grep -oP '[a-z]+')
+            ln -sf `ls $line/$ssl_file* | sort -V | tail -n 1` $host_workspace/nginx/conf/encrypt/live/$dir_name/$target_name.pem
+        done
+    done
 }
 
 main
