@@ -3,7 +3,7 @@ socks-port: 0
 mixed-port: {{port_proxy_guest}}
 allow-lan: true
 mode: Rule
-log-level: info
+log-level: silent
 external-controller: 0.0.0.0:{{port_web_guest}}
 external-ui: /ui
 secret: admin
