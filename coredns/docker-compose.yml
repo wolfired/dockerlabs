@@ -9,8 +9,10 @@ services:
   coredns:
     container_name: coredns
     image: coredns/coredns:latest
-    command: -conf /cfgs/Corefile
     restart: always
+    environment:
+      TZ:
+    command: -conf /cfgs/Corefile
     volumes:
     - {{host_workspace}}/coredns/cfgs:/cfgs
     - {{host_workspace}}/coredns/zones:/zones
