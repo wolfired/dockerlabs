@@ -98,6 +98,19 @@ function main() {
             sed -i "s#{{port_proxy_guest}}#$port_proxy_guest#g" $guest_workspace/config.yaml
             sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/config.yaml
             ;;
+        u3dacc)
+            local port_acc_guest=`yq e ".services.$service.port_acc_guest" ./dats.yml`
+            local port_acc_host=`yq e ".services.$service.port_acc_host" ./dats.yml`
+
+            local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
+            local port_web_host=`yq e ".services.$service.port_web_host" ./dats.yml`
+
+            sed -i "s#{{port_acc_guest}}#$port_acc_guest#g" $guest_workspace/docker-compose.yml
+            sed -i "s#{{port_acc_host}}#$port_acc_host#g" $guest_workspace/docker-compose.yml
+
+            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/docker-compose.yml
+            sed -i "s#{{port_web_host}}#$port_web_host#g" $guest_workspace/docker-compose.yml
+            ;;
         *)
             echo 'nothing to do'
             ;;
@@ -166,6 +179,11 @@ function handle_nginx() {
             sed -i "s#{{port_web_guest}}#$port_web_guest#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
             ;;
         clash)
+            local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
+
+            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
+            ;;
+        u3dacc)
             local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
 
             sed -i "s#{{port_web_guest}}#$port_web_guest#g" $host_workspace/$target_service/conf/conf.d/$guest_name.conf
