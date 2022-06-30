@@ -1,0 +1,26 @@
+version: "3"
+
+networks:
+  default:
+    external: true
+    name: lanet
+
+services:
+  u3dacc:
+    container_name: u3dacc
+    image: unitytechnologies/accelerator
+    restart: always
+    environment:
+      TZ:
+      USER:
+      PASSWORD:
+    volumes:
+    - {{host_workspace}}/u3dacc/agent:/agent
+    dns:
+    - {{guest_dns_ip}}
+    networks:
+      default:
+        ipv4_address: {{guest_ip}}
+    ports:
+    - "{{port_acc_host}}:{{port_acc_guest}}"
+    # - "{{port_web_host}}:{{port_web_guest}}"
