@@ -11,7 +11,6 @@ services:
     container_name: gitea
     restart: always
     environment:
-    - TZ=Asia/Shanghai
     volumes:
     - {{host_workspace}}/gitea/data:/data
     - /etc/timezone:/etc/timezone:ro

@@ -11,14 +11,6 @@ services:
     image: drone/drone
     restart: always
     environment:
-    - TZ=Asia/Shanghai
-    - DRONE_GITEA_SERVER=https://gitea.wolfired.com
-    - DRONE_GITEA_CLIENT_ID=295ebfa9-3635-4bfc-8aa4-ac1abe7d383c
-    - DRONE_GITEA_CLIENT_SECRET=FPbeSZD4UiojOQfwJevjt6c2CKG0KyngCYNs48HviauG
-    - DRONE_SERVER_PROTO=https
-    - DRONE_SERVER_HOST=drone.wolfired.com
-    - DRONE_RPC_SECRET=83630ed531cc42a8ce6162f9a19bdeb0
-    - DRONE_USER_CREATE=username:admin,machine:false,admin:true,token:5fad710ad2c2d89b1fa7ebd0165034a8
     volumes:
     - {{host_workspace}}/drone:/data
     dns:

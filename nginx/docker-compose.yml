@@ -11,7 +11,6 @@ services:
     image: nginx
     restart: always
     environment:
-    - TZ=Asia/Shanghai
     volumes:
     - {{host_workspace}}/nginx/html:/usr/share/nginx/html:ro
     - {{host_workspace}}/nginx/conf:/etc/nginx:ro

@@ -12,7 +12,6 @@ services:
     command: -conf /cfgs/Corefile
     restart: always
     environment:
-    - TZ=Asia/Shanghai
     volumes:
     - {{host_workspace}}/coredns/cfgs:/cfgs
     - {{host_workspace}}/coredns/zones:/zones
