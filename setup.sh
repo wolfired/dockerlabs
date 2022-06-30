@@ -2,6 +2,9 @@ host_workspace=${1:?'指定工作目录'}
 host_ip=${2:?'指定主机IP'}
 
 function main() {
+    echo
+    echo 'enter main'
+
     yq e '.services.*.name' ./dats.yml | while read -r service; do
         local guest_dns_ip=`yq e ".dns" ./dats.yml`
         local guest_name=`yq e ".services.$service.name" ./dats.yml`
@@ -100,12 +103,18 @@ function main() {
             ;;
         esac
     done
+
+    echo 'leave main'
+    echo
 }
 
 function handle_nginx() {
-    local service=nginx
+    echo
+    echo 'enter handle_nginx'
 
-    local enable=`yq e ".services.$service.enable" ./dats.yml`
+    local target_service=nginx
+
+    local enable=`yq e ".services.$target_service.enable" ./dats.yml`
     if (( 0 == $enable )); then
         return
     fi
@@ -115,7 +124,7 @@ function handle_nginx() {
         local guest_ip=`yq e ".services.$service.ip" ./dats.yml`
         local enable=`yq e ".services.$service.enable" ./dats.yml`
 
-        if [[ $$service == $guest_name ]]; then
+        if [[ $target_service == $service ]]; then
             continue
         fi
 
@@ -164,41 +173,56 @@ function handle_nginx() {
             ;;
         esac
 
-        cp -vu $guest_workspace/$guest_name.conf $host_workspace/$service/conf/conf.d/
+        cp -vu $guest_workspace/$guest_name.conf $host_workspace/$target_service/conf/conf.d/
     done
 
-    mkdir -p $host_workspace/$service/conf/encrypt/archive
-    find $host_workspace/$service/conf/encrypt/archive -mindepth 1 -maxdepth 1 -print | while read -r line; do
+    mkdir -p $host_workspace/$target_service/conf/encrypt/archive
+    find $host_workspace/$target_service/conf/encrypt/archive -mindepth 1 -maxdepth 1 -print | while read -r line; do
         local dir_name=`basename $line`
-        mkdir -p $host_workspace/$service/conf/encrypt/live/$dir_name
+        mkdir -p $host_workspace/$target_service/conf/encrypt/live/$dir_name
 
         local ssl_files=(cert chain fullchain privkey)
         for ssl_file in ${ssl_files[@]}; do
             local target_name=$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)' | grep -oP '[a-z]+')
 
-            pushd $host_workspace/$service/conf/encrypt/live/$dir_name 1>/dev/null 2>&1 && \
-            ln -sf ../../archive/$dir_name/$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_workspace/$service/conf/encrypt/live/$dir_name/$target_name.pem && \
+            pushd $host_workspace/$target_service/conf/encrypt/live/$dir_name 1>/dev/null 2>&1 && \
+            ln -sf ../../archive/$dir_name/$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_workspace/$target_service/conf/encrypt/live/$dir_name/$target_name.pem && \
             popd 1>/dev/null 2>&1
         done
     done
+
+    echo 'leave handle_nginx'
+    echo    
 }
 
 function handle_clash() {
-    local service=clash
+    echo
+    echo 'enter handle_clash'
 
-    local enable=`yq e ".services.$service.enable" ./dats.yml`
+    local target_service=clash
+
+    local enable=`yq e ".services.$target_service.enable" ./dats.yml`
     if (( 0 == $enable )); then
         return
     fi
 
-    pushd $host_workspace/$service 1>/dev/null 2>&1
+    pushd $host_workspace/$target_service 1>/dev/null 2>&1
 
-    git clone --depth 1 https://github.com/haishanh/yacd.git && \
-    npm i -g pnpm && \
-    pnpm i && \
-    pnpm build
+    if [[ ! -d $host_workspace/$target_service/yacd ]]; then
+        git clone --depth 1 https://github.com/haishanh/yacd.git
+    fi
 
-    popd
+
+    if [[ -d $host_workspace/$target_service/yacd && ! -d $host_workspace/$target_service/yacd/public ]]; then
+        pushd $host_workspace/$target_service/yacd 1>/dev/null 2>&1
+        npm i -g pnpm && pnpm i && pnpm build
+        popd 1>/dev/null 2>&1
+    fi
+
+    popd 1>/dev/null 2>&1
+
+    echo 'leave handle_nginx'
+    echo  
 }
 
 main
