@@ -21,7 +21,7 @@ function main() {
 
         mkdir -p $guest_workspace
 
-        cp -uR ./$guest_name/. $guest_workspace/
+        cp -vuR ./$guest_name/. $guest_workspace/
 
         sed -i "s#{{host_workspace}}#$host_workspace#g" $guest_workspace/docker-compose.yml
         sed -i "s#{{host_ip}}#$host_ip#g" $guest_workspace/docker-compose.yml
@@ -147,7 +147,7 @@ function handle_nginx() {
             ;;
         esac
 
-        cp -u $guest_workspace/$guest_name.conf $host_workspace/nginx/conf/conf.d/
+        cp -vu $guest_workspace/$guest_name.conf $host_workspace/nginx/conf/conf.d/
     done
 
     mkdir -p $host_workspace/nginx/conf/encrypt/archive
