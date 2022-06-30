@@ -79,6 +79,19 @@ function main() {
             sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/docker-compose.yml
             sed -i "s#{{port_web_host}}#$port_web_host#g" $guest_workspace/docker-compose.yml
             ;;
+        clash)
+            local port_proxy_guest=`yq e ".services.$service.port_proxy_guest" ./dats.yml`
+            local port_proxy_host=`yq e ".services.$service.port_proxy_host" ./dats.yml`
+
+            local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
+            local port_web_host=`yq e ".services.$service.port_web_host" ./dats.yml`
+
+            sed -i "s#{{port_proxy_guest}}#$port_proxy_guest#g" $guest_workspace/docker-compose.yml
+            sed -i "s#{{port_proxy_host}}#$port_proxy_host#g" $guest_workspace/docker-compose.yml
+
+            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/docker-compose.yml
+            sed -i "s#{{port_web_host}}#$port_web_host#g" $guest_workspace/docker-compose.yml
+            ;;
         *)
             echo 'nothing to do'
             ;;
@@ -123,24 +136,23 @@ function handle_nginx() {
         case $guest_name in
         coredns)
             local port_health_guest=`yq e ".services.$service.port_health_guest" ./dats.yml`
-            local port_health_host=`yq e ".services.$service.port_health_host" ./dats.yml`
 
             sed -i "s#{{port_health_guest}}#$port_health_guest#g" $guest_workspace/$guest_name.conf
-            sed -i "s#{{port_health_host}}#$port_health_host#g" $guest_workspace/$guest_name.conf
             ;;
         gitea)
             local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
-            local port_web_host=`yq e ".services.$service.port_web_host" ./dats.yml`
 
             sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/$guest_name.conf
-            sed -i "s#{{port_web_host}}#$port_web_host#g" $guest_workspace/$guest_name.conf
             ;;
         drone)
             local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
-            local port_web_host=`yq e ".services.$service.port_web_host" ./dats.yml`
 
             sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/$guest_name.conf
-            sed -i "s#{{port_web_host}}#$port_web_host#g" $guest_workspace/$guest_name.conf
+            ;;
+        clash)
+            local port_web_guest=`yq e ".services.$service.port_web_guest" ./dats.yml`
+
+            sed -i "s#{{port_web_guest}}#$port_web_guest#g" $guest_workspace/$guest_name.conf
             ;;
         *)
             echo 'nothing to do'

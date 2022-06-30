@@ -6,9 +6,9 @@ networks:
     name: lanet
 
 services:
-  gitea:
+  gitea_server:
     image: gitea/gitea
-    container_name: gitea
+    container_name: gitea_server
     restart: always
     environment:
       TZ:

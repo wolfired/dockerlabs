@@ -1,9 +1,9 @@
 . {
  hosts {
-  192.168.180.25 help.wolfired.com
-  192.168.180.25 coredns.wolfired.com
-  192.168.180.25 gitea.wolfired.com
-  192.168.180.25 drone.wolfired.com
+  192.168.100.168 help.wolfired.com
+  192.168.100.168 coredns.wolfired.com
+  192.168.100.168 gitea.wolfired.com
+  192.168.100.168 drone.wolfired.com
   192.168.180.25 clash.wolfired.com
   192.168.180.25 acc.wolfired.com
   192.168.180.25 jenkins.wolfired.com
@@ -18,7 +18,7 @@
 
   fallthrough
  }
- forward . 192.168.100.8 223.5.5.5 180.76.76.76 114.114.114.114 208.67.222.222 101.226.4.6 8.8.8.8 {
+ forward . 192.168.100.8 192.168.180.25 223.5.5.5 180.76.76.76 114.114.114.114 208.67.222.222 101.226.4.6 8.8.8.8 {
      policy sequential
  }
  health :{{port_health_guest}}

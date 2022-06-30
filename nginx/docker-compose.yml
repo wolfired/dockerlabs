@@ -6,8 +6,8 @@ networks:
     name: lanet
 
 services:
-  nginx:
-    container_name: nginx
+  nginx_server:
+    container_name: nginx_server
     image: nginx
     restart: always
     volumes:

@@ -33,7 +33,7 @@ services:
     port_web_guest: 80
     port_web_host: 1500
   clash:
-    enable: 0
+    enable: 1
     name: 'clash'
     ip: '192.168.1.6'
     port_proxy_guest: 1080
