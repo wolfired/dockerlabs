@@ -1,5 +1,8 @@
+root_ws="$(dirname $0)"
+
 host_ws=${1:?'指定工作目录'}
 host_ip=${2:?'指定主机IP'}
+exec_cmd=${3:?'指定执行命令: setup_services, start_services, stop_services'}
 
 function replace_service_cfg() {
     local service=${1:?'请指定服务'}
@@ -7,86 +10,33 @@ function replace_service_cfg() {
 
     cat $cfgfile | grep -oP '\{\{\..+?\}\}' | while read -r placeholder; do
         local key=`echo $placeholder | grep -oP '(?<=\{\{).+?(?=\}\})'`
-        local value=`yq e ".services.$service$key" ./dats.yml`
+        local value=`yq e ".services.$service$key" $root_ws/dats.yml`
         sed -i "s#$placeholder#$value#" $cfgfile
     done
 }
 
 function get_guest_dns_ip() {
-    yq e '.services.coredns.ip' ./dats.yml
+    yq e '.services.coredns.ip' $root_ws/dats.yml
 }
 
-function main() {
+function setup_nginx() {
     echo
-    echo 'enter main'
-
-    local guest_dns_ip=`get_guest_dns_ip`
-
-    yq e '.services.*.name' ./dats.yml | while read -r service; do
-        if [[ ! -d ./$service ]]; then
-            echo "$service do not exist"
-            continue
-        fi
-
-        local enable=`yq e ".services.$service.enable" ./dats.yml`
-
-        if (( 0 == $enable )); then
-            echo "$service disabled"
-            continue
-        fi
-
-        mkdir -p $host_ws/$service
-
-        cp -vuR ./$service/. $host_ws/$service/
-
-        sed -i "s#{{host_ws}}#$host_ws#g" $host_ws/$service/docker-compose.yml
-        sed -i "s#{{host_ip}}#$host_ip#g" $host_ws/$service/docker-compose.yml
-        sed -i "s#{{guest_dns_ip}}#$guest_dns_ip#g" $host_ws/$service/docker-compose.yml
-
-        replace_service_cfg $service $host_ws/$service/docker-compose.yml
-
-        case $service in
-        coredns)
-            replace_service_cfg $service $host_ws/$service/cfgs/Corefile
-            ;;
-        nginx)
-            ;;
-        gitea)
-            ;;
-        drone)
-            ;;
-        clash)
-            replace_service_cfg $service $host_ws/$service/config.yaml
-            ;;
-        u3dacc)
-            ;;
-        *)
-            ;;
-        esac
-    done
-
-    echo 'leave main'
-    echo
-}
-
-function handle_nginx() {
-    echo
-    echo 'enter handle_nginx'
+    echo 'enter setup_nginx'
 
     local target_service=nginx
 
-    local enable=`yq e ".services.$target_service.enable" ./dats.yml`
+    local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
     if (( 0 == $enable )); then
         echo "$target_service disabled"
         return
     fi
 
-    yq e '.services.*.name' ./dats.yml | while read -r service; do
+    yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
         if [[ $target_service == $service ]]; then
             continue
         fi
 
-        local enable=`yq e ".services.$service.enable" ./dats.yml`
+        local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
 
         if (( 0 == $enable )); then
             echo "$service disabled"
@@ -123,17 +73,17 @@ function handle_nginx() {
         done
     done
 
-    echo 'leave handle_nginx'
+    echo 'leave setup_nginx'
     echo    
 }
 
-function handle_clash() {
+function setup_clash() {
     echo
-    echo 'enter handle_clash'
+    echo 'enter setup_clash'
 
     local target_service=clash
 
-    local enable=`yq e ".services.$target_service.enable" ./dats.yml`
+    local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
     if (( 0 == $enable )); then
         echo "$target_service disabled"
         return
@@ -153,10 +103,120 @@ function handle_clash() {
 
     popd 1>/dev/null 2>&1
 
-    echo 'leave handle_nginx'
+    echo 'leave setup_nginx'
     echo  
 }
 
-main
-handle_nginx
-handle_clash
+function setup_services() {
+    echo
+    echo 'enter setup_services'
+
+    local guest_dns_ip=`get_guest_dns_ip`
+
+    yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
+        local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
+
+        if (( 0 == $enable )); then
+            echo "$service disabled"
+            continue
+        fi
+
+        if [[ ! -d $root_ws/$service ]]; then
+            echo "$service do not exist"
+            continue
+        fi
+
+        mkdir -p $host_ws/$service
+
+        cp -vuR $root_ws/$service/. $host_ws/$service/
+
+        sed -i "s#{{host_ws}}#$host_ws#g" $host_ws/$service/docker-compose.yml
+        sed -i "s#{{host_ip}}#$host_ip#g" $host_ws/$service/docker-compose.yml
+        sed -i "s#{{guest_dns_ip}}#$guest_dns_ip#g" $host_ws/$service/docker-compose.yml
+
+        replace_service_cfg $service $host_ws/$service/docker-compose.yml
+
+        case $service in
+        coredns)
+            replace_service_cfg $service $host_ws/$service/cfgs/Corefile
+            ;;
+        nginx)
+            ;;
+        gitea)
+            ;;
+        drone)
+            ;;
+        clash)
+            replace_service_cfg $service $host_ws/$service/config.yaml
+            ;;
+        u3dacc)
+            ;;
+        *)
+            ;;
+        esac
+    done
+
+    setup_nginx
+    setup_clash
+
+    echo 'leave setup_services'
+    echo
+}
+
+function start_services() {
+    echo
+    echo 'enter start_services'
+
+    yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
+        local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
+
+        if (( 0 == $enable )); then
+            echo "$service disabled"
+            continue
+        fi
+
+        if [[ ! -d $host_ws/$service ]]; then
+            echo "$service do not exist"
+            continue
+        fi
+
+        pushd $host_ws/$service 1>/dev/null 2>&1
+
+        docker-compose up -d
+
+        popd 1>/dev/null 2>&1
+    done
+
+    echo 'leave start_services'
+    echo
+}
+
+function stop_services() {
+    echo
+    echo 'enter stop_services'
+
+    yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
+        local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
+
+        if (( 0 == $enable )); then
+            echo "$service disabled"
+            continue
+        fi
+
+        if [[ ! -d $host_ws/$service ]]; then
+            echo "$service do not exist"
+            continue
+        fi
+
+        pushd $host_ws/$service 1>/dev/null 2>&1
+
+        docker-compose down
+
+        popd 1>/dev/null 2>&1
+    done
+
+    echo 'leave stop_services'
+    echo
+}
+
+$exec_cmd
