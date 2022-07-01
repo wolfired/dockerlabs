@@ -2,7 +2,7 @@ root_ws="$(dirname $0)"
 
 host_ws=${1:?'指定工作目录'}
 host_ip=${2:?'指定主机IP'}
-exec_cmd=${3:?'指定执行命令: setup_services, start_services, stop_services'}
+exec_cmd=${3:?'指定执行命令: services_setup, services_start, services_stop'}
 
 function replace_service_cfg() {
     local service=${1:?'请指定服务'}
@@ -107,9 +107,9 @@ function setup_clash() {
     echo  
 }
 
-function setup_services() {
+function services_setup() {
     echo
-    echo 'enter setup_services'
+    echo 'enter services_setup'
 
     local guest_dns_ip=`get_guest_dns_ip`
 
@@ -159,13 +159,13 @@ function setup_services() {
     setup_nginx
     setup_clash
 
-    echo 'leave setup_services'
+    echo 'leave services_setup'
     echo
 }
 
-function start_services() {
+function services_start() {
     echo
-    echo 'enter start_services'
+    echo 'enter services_start'
 
     yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
@@ -187,13 +187,13 @@ function start_services() {
         popd 1>/dev/null 2>&1
     done
 
-    echo 'leave start_services'
+    echo 'leave services_start'
     echo
 }
 
-function stop_services() {
+function services_stop() {
     echo
-    echo 'enter stop_services'
+    echo 'enter services_stop'
 
     yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
@@ -215,7 +215,7 @@ function stop_services() {
         popd 1>/dev/null 2>&1
     done
 
-    echo 'leave stop_services'
+    echo 'leave services_stop'
     echo
 }
 

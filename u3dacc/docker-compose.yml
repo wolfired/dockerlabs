@@ -16,7 +16,7 @@ services:
       PASSWORD:
       DISABLE_USAGE_STATS:
     volumes:
-    - {{host.ws}}/{{.name}}/agent:/agent
+    - {{host_ws}}/{{.name}}/agent:/agent
     dns:
     - {{guest_dns_ip}}
     networks:
