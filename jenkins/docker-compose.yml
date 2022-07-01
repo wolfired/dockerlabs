@@ -6,20 +6,20 @@ networks:
     name: lanet
 
 services:
-  jenkins:
-    container_name: jenkins
+  {{.name}}:
+    container_name: {{.name}}
     image: jenkins/jenkins:latest
     restart: always
     environment:
-    - TZ=Asia/Shanghai
-    - JAVA_OPTS='-Duser.timezone=Asia/Shanghai'
+      TZ:
+      JAVA_OPTS:
     volumes:
-    - {{host_workspace}}/jenkins/data:/var/jenkins_home
+    - {{host_ws}}/{{.name}}/data:/var/jenkins_home
     dns:
     - {{guest_dns_ip}}
     networks:
       default:
-        ipv4_address: {{guest_ip}}
+        ipv4_address: {{.ip}}
     ports:
-    - "58080:8080"
-    - "50000:50000"
+    - "{{.ports.agent.host}}:{{.ports.agent.guest}}"
+    # - "{{.ports.web.host}}:{{.ports.web.guest}}"

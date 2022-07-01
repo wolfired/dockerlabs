@@ -6,18 +6,18 @@ networks:
     name: lanet
 
 services:
-  nginx_server:
-    container_name: nginx_server
+  {{.name}}:
+    container_name: {{.name}}
     image: nginx
     restart: always
     volumes:
-    - {{host_workspace}}/nginx/html:/usr/share/nginx/html:ro
-    - {{host_workspace}}/nginx/conf:/etc/nginx:ro
+    - {{host_ws}}/{{.name}}/html:/usr/share/nginx/html:ro
+    - {{host_ws}}/{{.name}}/conf:/etc/nginx:ro
     dns:
     - {{guest_dns_ip}}
     networks:
       default:
-        ipv4_address: {{guest_ip}}
+        ipv4_address: {{.ip}}
     ports:
-    - "{{port_web_host}}:{{port_web_guest}}"
-    - "{{port_ssl_host}}:{{port_ssl_guest}}"
+    - "{{.ports.http.host}}:{{.ports.http.guest}}"
+    - "{{.ports.https.host}}:{{.ports.https.guest}}"

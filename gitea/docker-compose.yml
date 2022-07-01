@@ -6,21 +6,21 @@ networks:
     name: lanet
 
 services:
-  gitea_server:
+  {{.name}}:
     image: gitea/gitea
-    container_name: gitea_server
+    container_name: {{.name}}
     restart: always
     environment:
       TZ:
     volumes:
-    - {{host_workspace}}/gitea/data:/data
+    - {{host_ws}}/{{.name}}/data:/data
     - /etc/timezone:/etc/timezone:ro
     - /etc/localtime:/etc/localtime:ro
     dns:
     - {{guest_dns_ip}}
     networks:
       default:
-        ipv4_address: {{guest_ip}}
+        ipv4_address: {{.ip}}
     ports:
-    - "{{port_ssh_host}}:{{port_ssh_guest}}"
-    # - "{{port_web_host}}:{{port_web_guest}}"
+    - "{{.ports.ssh.host}}:{{.ports.ssh.guest}}"
+    # - "{{.ports.web.host}}:{{.ports.web.guest}}"

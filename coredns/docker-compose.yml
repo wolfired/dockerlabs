@@ -6,20 +6,20 @@ networks:
     name: lanet
 
 services:
-  coredns:
-    container_name: coredns
+  {{.name}}:
+    container_name: {{.name}}
     image: coredns/coredns:latest
     restart: always
     environment:
       TZ:
     command: -conf /cfgs/Corefile
     volumes:
-    - {{host_workspace}}/coredns/cfgs:/cfgs
-    - {{host_workspace}}/coredns/zones:/zones
+    - {{host_ws}}/{{.name}}/cfgs:/cfgs
+    - {{host_ws}}/{{.name}}/zones:/zones
     networks:
       default:
-        ipv4_address: {{guest_ip}}
+        ipv4_address: {{.ip}}
     ports:
-    - "{{host_ip}}:{{port_udp_host}}:{{port_udp_guest}}/udp"
-    - "{{host_ip}}:{{port_tcp_host}}:{{port_tcp_guest}}/tcp"
-    # - "{{host_ip}}:{{port_health_host}}:{{port_health_guest}}"
+    - "{{host_ip}}:{{.ports.udp.host}}:{{.ports.udp.guest}}/udp"
+    - "{{host_ip}}:{{.ports.udp.host}}:{{.ports.tcp.guest}}/tcp"
+    # - "{{host_ip}}:{{.ports.health.host}}:{{.ports.health.guest}}"

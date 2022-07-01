@@ -6,20 +6,20 @@ networks:
     name: lanet
 
 services:
-  clash:
-    container_name: clash
+  {{.name}}:
+    container_name: {{.name}}
     image: dreamacro/clash:dev
     restart: always
     environment:
       TZ:
     volumes:
-    - {{host_workspace}}/clash/config.yaml:/root/.config/clash/config.yaml
-    - {{host_workspace}}/clash/yacd/public:/ui
+    - {{host_ws}}/{{.name}}/config.yaml:/root/.config/clash/config.yaml
+    - {{host_ws}}/{{.name}}/yacd/public:/ui
     dns:
     - {{guest_dns_ip}}
     networks:
       default:
-        ipv4_address: {{guest_ip}}
+        ipv4_address: {{.ip}}
     ports:
-    - "{{port_proxy_host}}:{{port_proxy_guest}}"
-    # - "{{port_web_host}}:{{port_web_guest}}"
+    - "{{.ports.proxy.host}}:{{.ports.proxy.guest}}"
+    # - "{{.ports.web.host}}:{{.ports.web.guest}}"

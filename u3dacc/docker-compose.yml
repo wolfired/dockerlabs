@@ -6,8 +6,8 @@ networks:
     name: lanet
 
 services:
-  u3dacc:
-    container_name: u3dacc
+  {{.name}}:
+    container_name: {{.name}}
     image: unitytechnologies/accelerator
     restart: always
     environment:
@@ -16,12 +16,12 @@ services:
       PASSWORD:
       DISABLE_USAGE_STATS:
     volumes:
-    - {{host_workspace}}/u3dacc/agent:/agent
+    - {{host.ws}}/{{.name}}/agent:/agent
     dns:
     - {{guest_dns_ip}}
     networks:
       default:
-        ipv4_address: {{guest_ip}}
+        ipv4_address: {{.ip}}
     ports:
-    - "{{port_acc_host}}:{{port_acc_guest}}"
-    # - "{{port_web_host}}:{{port_web_guest}}"
+    - "{{.ports.acc.host}}:{{.ports.acc.guest}}"
+    # - "{{.ports.web.host}}:{{.ports.web.guest}}"

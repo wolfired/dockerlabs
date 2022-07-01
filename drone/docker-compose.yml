@@ -6,8 +6,8 @@ networks:
     name: lanet
 
 services:
-  drone_server:
-    container_name: drone_server
+  {{.name}}:
+    container_name: {{.name}}
     image: drone/drone
     restart: always
     environment:
@@ -20,14 +20,14 @@ services:
       DRONE_RPC_SECRET:
       DRONE_USER_CREATE:
     volumes:
-    - {{host_workspace}}/drone:/data
+    - {{host_ws}}/{{.name}}:/data
     dns:
     - {{guest_dns_ip}}
     networks:
       default:
-        ipv4_address: {{guest_ip}}
+        ipv4_address: {{.ip}}
     # ports:
-    # - "{{port_web_host}}:{{port_web_guest}}"
+    # - "{{.ports.web.host}}:{{.ports.web.guest}}"
 
 #   runner:
 #     container_name: drone_runner
