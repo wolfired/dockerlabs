@@ -58,6 +58,8 @@ function setup_nginx() {
         replace_service_cfg $service $host_ws/$target_service/conf/conf.d/$service.conf
     done
 
+    mkdir -p $host_ws/$target_service/html/share
+
     mkdir -p $host_ws/$target_service/conf/encrypt/archive
     find $host_ws/$target_service/conf/encrypt/archive -mindepth 1 -maxdepth 1 -print | while read -r line; do
         local dir_name=`basename $line`
