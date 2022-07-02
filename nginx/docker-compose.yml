@@ -10,6 +10,8 @@ services:
     container_name: {{.name}}
     image: nginx
     restart: always
+    environment:
+      TZ:
     volumes:
     - {{host_ws}}/{{.name}}/html:/usr/share/nginx/html:ro
     - {{host_ws}}/{{.name}}/conf:/etc/nginx:ro
