@@ -6,15 +6,13 @@
   192.168.100.168 drone.wolfired.com
   192.168.100.168 clash.wolfired.com
   192.168.100.168 u3dacc.wolfired.com
-  192.168.180.25 jenkins.wolfired.com
+  192.168.100.168 jenkins.wolfired.com
 
   192.168.180.25 runner1.wolfired.com
   192.168.180.25 runner2.wolfired.com
   192.168.73.219 runner3.wolfired.com
   192.168.73.39  runner4.wolfired.com
   192.168.73.213 runner5.wolfired.com
-
-  192.168.180.25 ssh.mac.com
 
   fallthrough
  }
