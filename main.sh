@@ -136,6 +136,7 @@ function services_setup() {
         sed -i "s#{{host_ip}}#$host_ip#g" $host_ws/$service/docker-compose.yml
         sed -i "s#{{guest_dns_ip}}#$guest_dns_ip#g" $host_ws/$service/docker-compose.yml
 
+        replace_service_cfg $service $host_ws/$service/.env
         replace_service_cfg $service $host_ws/$service/docker-compose.yml
 
         case $service in
