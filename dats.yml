@@ -60,11 +60,11 @@ services:
     ip: '192.168.1.7'
     ports:
       web:
-        guest: 8080
-        host: 8080
+        guest: 80
+        host: 1700
       agent:
-        guest: 50000
-        host: 50000
+        guest: 1701
+        host: 1701
   u3dacc:
     enable: 1
     name: 'u3dacc'
