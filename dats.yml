@@ -55,7 +55,7 @@ services:
         guest: 1080
         host: 1080
   jenkins:
-    enable: 0
+    enable: 1
     name: 'jenkins'
     ip: '192.168.1.7'
     ports:
