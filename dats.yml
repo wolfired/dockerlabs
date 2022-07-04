@@ -1,6 +1,7 @@
 services:
   coredns:
     enable: 1
+    start: 1
     name: 'coredns'
     ip: '192.168.1.2'
     ports:
@@ -15,6 +16,7 @@ services:
         host: 5300
   nginx:
     enable: 1
+    start: 1
     name: 'nginx'
     ip: '192.168.1.3'
     ports:
@@ -26,6 +28,7 @@ services:
         host: 443
   gitea:
     enable: 1
+    start: 1
     name: 'gitea'
     ip: '192.168.1.4'
     ports:
@@ -37,6 +40,7 @@ services:
         host: 22
   drone:
     enable: 1
+    start: 1
     name: 'drone'
     ip: '192.168.1.5'
     ports:
@@ -45,6 +49,7 @@ services:
         host: 1500
   clash:
     enable: 1
+    start: 1
     name: 'clash'
     ip: '192.168.1.6'
     ports:
@@ -56,6 +61,7 @@ services:
         host: 1080
   jenkins:
     enable: 1
+    start: 1
     name: 'jenkins'
     ip: '192.168.1.7'
     ports:
@@ -67,6 +73,7 @@ services:
         host: 1701
   u3dacc:
     enable: 1
+    start: 1
     name: 'u3dacc'
     ip: '192.168.1.8'
     ports:
@@ -76,3 +83,12 @@ services:
       acc:
         guest: 10080
         host: 10080
+  drone_runner:
+    enable: 1
+    start: 0
+    name: 'drone_runner'
+    ip: '192.168.1.9'
+    ports:
+      web:
+        guest: 1900
+        host: 1900

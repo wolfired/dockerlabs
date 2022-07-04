@@ -1,0 +1,37 @@
+version: "3"
+
+networks:
+  default:
+    external: true
+    name: lanet
+
+services:
+  {{.name}}:
+    container_name: {{.name}}
+    image: drone/drone-runner-docker
+    restart: always
+    environment:
+      TZ:
+      DRONE_RPC_PROTO:
+      DRONE_RPC_HOST:
+      DRONE_RPC_SECRET:
+      DRONE_RUNNER_CAPACITY:
+      DRONE_RUNNER_NAME:
+      DRONE_HTTP_PROTO:
+      DRONE_HTTP_HOST:
+      DRONE_HTTP_BIND:
+      DRONE_UI_DISABLED:
+      DRONE_UI_USERNAME:
+      DRONE_UI_PASSWORD:
+      DRONE_RUNNER_NETWORKS:
+      DRONE_MEMORY_LIMIT:
+      DRONE_MEMORY_SWAP_LIMIT:
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    dns:
+    - {{guest_dns_ip}}
+    networks:
+      default:
+        ipv4_address: {{.ip}}
+    ports:
+    - "{{.ports.web.host}}:{{.ports.web.guest}}"

@@ -171,9 +171,10 @@ function services_start() {
 
     yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
+        local start=`yq e ".services.$service.start" $root_ws/dats.yml`
 
-        if (( 0 == $enable )); then
-            echo "$service disabled"
+        if (( 0 == $enable || 0 == $start )); then
+            echo "$service disabled or distart"
             continue
         fi
 
@@ -199,9 +200,10 @@ function services_stop() {
 
     yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
+        local start=`yq e ".services.$service.start" $root_ws/dats.yml`
 
-        if (( 0 == $enable )); then
-            echo "$service disabled"
+        if (( 0 == $enable || 0 == $start )); then
+            echo "$service disabled or distart"
             continue
         fi
 

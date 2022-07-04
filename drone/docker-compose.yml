@@ -28,33 +28,3 @@ services:
         ipv4_address: {{.ip}}
     # ports:
     # - "{{.ports.web.host}}:{{.ports.web.guest}}"
-
-#   runner:
-#     container_name: drone_runner
-#     image: drone/drone-runner-docker
-#     restart: always
-#     environment:
-#     - TZ=Asia/Shanghai
-#     - DRONE_RPC_PROTO=https
-#     - DRONE_RPC_HOST=drone.wolfired.com
-#     - DRONE_RPC_SECRET=83630ed531cc42a8ce6162f9a19bdeb0
-#     - DRONE_RUNNER_CAPACITY=2
-#     - DRONE_RUNNER_NAME=runner1
-#     - DRONE_HTTP_PROTO=http
-#     - DRONE_HTTP_HOST=runner1.wolfired.com:4001
-#     - DRONE_HTTP_BIND=:4001
-#     - DRONE_UI_DISABLED=false
-#     - DRONE_UI_USERNAME=admin
-#     - DRONE_UI_PASSWORD=admin
-#     - DRONE_RUNNER_NETWORKS=lanet
-#     # - DRONE_MEMORY_LIMIT=8589934592
-#     # - DRONE_MEMORY_SWAP_LIMIT=8589934592
-#     volumes:
-#     - /var/run/docker.sock:/var/run/docker.sock
-#     networks:
-#       default:
-#         ipv4_address: 192.168.1.6
-#     dns:
-#     - 192.168.1.2
-#     ports:
-#     - "4001:4001"
