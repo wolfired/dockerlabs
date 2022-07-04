@@ -8,7 +8,7 @@ networks:
 services:
   {{.name}}:
     container_name: {{.name}}
-    image: jenkins/jenkins:latest
+    image: jenkins/jenkins:lts-jdk11
     restart: always
     environment:
       TZ:
