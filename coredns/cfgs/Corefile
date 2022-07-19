@@ -7,6 +7,7 @@
   192.168.100.168 clash.wolfired.com
   192.168.100.168 u3dacc.wolfired.com
   192.168.100.168 jenkins.wolfired.com
+  192.168.100.168 onedev.wolfired.com
 
   192.168.180.25 runner1.wolfired.com
   192.168.180.25 runner2.wolfired.com

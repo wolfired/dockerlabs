@@ -92,3 +92,15 @@ services:
       web:
         guest: 1900
         host: 1900
+  onedev:
+    enable: 1
+    start: 1
+    name: 'onedev'
+    ip: '192.168.1.10'
+    ports:
+      web:
+        guest: 6610
+        host: 6610
+      ssh:
+        guest: 6611
+        host: 6611

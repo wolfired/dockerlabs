@@ -1,0 +1,25 @@
+version: "3"
+
+networks:
+  default:
+    external: true
+    name: lanet
+
+services:
+  {{.name}}:
+    image: 1dev/server:latest
+    container_name: {{.name}}
+    restart: always
+    environment:
+      TZ:
+    volumes:
+    - {{host_ws}}/{{.name}}/data:/opt/onedev
+    - /var/run/docker.sock:/var/run/docker.sock
+    dns:
+    - {{guest_dns_ip}}
+    networks:
+      default:
+        ipv4_address: {{.ip}}
+    ports:
+    - "{{.ports.ssh.host}}:{{.ports.ssh.guest}}"
+    # - "{{.ports.web.host}}:{{.ports.web.guest}}"
