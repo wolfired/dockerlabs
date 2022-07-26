@@ -7,7 +7,7 @@ networks:
 
 services:
   {{.name}}:
-    image: 1dev/server:latest
+    image: 1dev/server:svn
     container_name: {{.name}}
     restart: always
     environment:
