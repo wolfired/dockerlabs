@@ -27,7 +27,7 @@ services:
         guest: 443
         host: 443
   gitea:
-    enable: 1
+    enable: 0
     start: 0
     name: 'gitea'
     ip: '192.168.1.4'
@@ -39,7 +39,7 @@ services:
         guest: 22
         host: 22
   drone:
-    enable: 1
+    enable: 0
     start: 0
     name: 'drone'
     ip: '192.168.1.5'
@@ -60,7 +60,7 @@ services:
         guest: 1080
         host: 1080
   jenkins:
-    enable: 1
+    enable: 0
     start: 0
     name: 'jenkins'
     ip: '192.168.1.7'
@@ -84,7 +84,7 @@ services:
         guest: 10080
         host: 10080
   drone_runner:
-    enable: 1
+    enable: 0
     start: 0
     name: 'drone_runner'
     ip: '192.168.1.9'

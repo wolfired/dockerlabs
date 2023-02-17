@@ -2,7 +2,74 @@ root_ws="$(dirname $0)"
 
 host_ws=${1:?'指定工作目录'}
 host_ip=${2:?'指定主机IP'}
-exec_cmd=${3:?'指定执行命令: services_setup, services_start, services_stop'}
+exec_cmd=${3:?'指定执行命令: services_setup, services_start, services_stop, services_restart'}
+
+function color_msg() {
+    local color=${1:?'(r)ed or (g)reen (b)lue (y)ellow (p)urple (c)yan'}
+
+    if (( 2 > $# )); then
+        return
+    fi
+
+    if [[ 'r' == $color ]]; then
+        echo -e '\033[31m'${@:2}'\033[0m' # red
+    elif [[ 'g' == $color ]]; then
+        echo -e '\033[32m'${@:2}'\033[0m' # green
+    elif [[ 'b' == $color ]]; then
+        echo -e '\033[34m'${@:2}'\033[0m' # blue
+    elif [[ 'y' == $color ]]; then
+        echo -e '\033[33m'${@:2}'\033[0m' # yellow
+    elif [[ 'p' == $color ]]; then
+        echo -e '\033[35m'${@:2}'\033[0m' # purple
+    elif [[ 'c' == $color ]]; then
+        echo -e '\033[36m'${@:2}'\033[0m' # cyan
+    else
+        echo -e '\033[37m'${@:2}'\033[0m' # white
+    fi
+}
+
+function select_service() {
+    local ps3=${1:-'请选择服务'}
+
+    local services=()
+
+    for service in `yq e '.services.*.name' $root_ws/dats.yml`; do
+        local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
+
+        if (( 0 == $enable )); then
+            continue
+        fi
+
+        if [[ ! -d $root_ws/$service ]]; then
+            continue
+        fi
+
+        services+=($service)
+    done
+
+    PS3="$ps3(1-${#services[@]}): "
+    select label in ${services[@]}; do
+        local index=$(($REPLY-1))
+        if (( 0 <= $index && $index < ${#services[@]} )); then
+            echo ${services[$index]}
+        else
+            echo "Illegal Selection: $REPLY" 1>&2
+            exit 1
+        fi
+        break
+    done
+}
+
+function is_service_running() {
+    local target_service=${1:?'请指定服务'}
+
+    for service in `docker-compose ls | tail -n +2 | grep -oP '^\w+'`; do
+        if [[ $target_service == $service ]]; then
+            return 1
+        fi
+    done
+    return 0
+}
 
 function replace_service_cfg() {
     local service=${1:?'请指定服务'}
@@ -21,7 +88,8 @@ function get_guest_dns_ip() {
 
 function setup_nginx() {
     echo
-    echo 'enter setup_nginx'
+    color_msg y 'enter setup_nginx'
+    echo
 
     local target_service=nginx
 
@@ -53,7 +121,7 @@ function setup_nginx() {
             continue
         fi
 
-        cp -vu $host_ws/$service/$service.conf $host_ws/$target_service/conf/conf.d/
+        cp -v $host_ws/$service/$service.conf $host_ws/$target_service/conf/conf.d/
 
         replace_service_cfg $service $host_ws/$target_service/conf/conf.d/$service.conf
     done
@@ -67,21 +135,22 @@ function setup_nginx() {
 
         local ssl_files=(cert chain fullchain privkey)
         for ssl_file in ${ssl_files[@]}; do
-            local target_name=$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)' | grep -oP '[a-z]+')
+            local target_name=$(basename `ls -c $line/$ssl_file* | head -n 1` | grep -oP '[a-z\d]+?(?=\.)' | grep -oP '[a-z]+')
 
             pushd $host_ws/$target_service/conf/encrypt/live/$dir_name 1>/dev/null 2>&1 && \
-            ln -sf ../../archive/$dir_name/$(basename `ls $line/$ssl_file* | sort -V | tail -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_ws/$target_service/conf/encrypt/live/$dir_name/$target_name.pem && \
+            ln -sf ../../archive/$dir_name/$(basename `ls -c $line/$ssl_file* | head -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_ws/$target_service/conf/encrypt/live/$dir_name/$target_name.pem && \
             popd 1>/dev/null 2>&1
         done
     done
 
-    echo 'leave setup_nginx'
-    echo    
+    echo
+    color_msg y 'leave setup_nginx'
 }
 
 function setup_clash() {
     echo
-    echo 'enter setup_clash'
+    color_msg y 'enter setup_clash'
+    echo
 
     local target_service=clash
 
@@ -103,34 +172,48 @@ function setup_clash() {
         popd 1>/dev/null 2>&1
     fi
 
+    if [[ -n $IKUUU_URL ]]; then
+        curl $IKUUU_URL -o $host_ws/$target_service/ikuuu.yaml && \
+        cat $host_ws/$target_service/ikuuu.yaml | tail -n +7  >> $host_ws/$target_service/config.yaml && \
+        rm $host_ws/$target_service/ikuuu.yaml
+    else
+        echo "Maybe you need setup IKUUU_URL"
+    fi
+
     popd 1>/dev/null 2>&1
 
-    echo 'leave setup_nginx'
-    echo  
+    echo
+    color_msg y 'leave setup_clash'
 }
 
 function services_setup() {
+    local target_service=${1:-''}
+
+    color_msg y 'enter services_setup'
     echo
-    echo 'enter services_setup'
 
     local guest_dns_ip=`get_guest_dns_ip`
 
     yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
+        if [[ -n $target_service && $target_service != $service ]]; then
+            continue
+        fi
+
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
 
         if (( 0 == $enable )); then
-            echo "$service disabled"
+            color_msg r "$service disabled"
             continue
         fi
 
         if [[ ! -d $root_ws/$service ]]; then
-            echo "$service do not exist"
+            color_msg r "$service do not exist"
             continue
         fi
 
         mkdir -p $host_ws/$service
 
-        cp -vuR $root_ws/$service/. $host_ws/$service/
+        cp -vR $root_ws/$service/. $host_ws/$service/
 
         sed -i "s#{{host_ws}}#$host_ws#g" $host_ws/$service/docker-compose.yml
         sed -i "s#{{host_ip}}#$host_ip#g" $host_ws/$service/docker-compose.yml
@@ -159,69 +242,127 @@ function services_setup() {
         esac
     done
 
-    setup_nginx
-    setup_clash
 
-    echo 'leave services_setup'
+    yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
+        if [[ -n $target_service && $target_service != $service ]]; then
+            continue
+        fi
+
+        local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
+
+        if (( 0 == $enable )); then
+            continue
+        fi
+
+        if [[ ! -d $root_ws/$service ]]; then
+            continue
+        fi
+
+        case $service in
+        coredns)
+            ;;
+        nginx)
+            setup_nginx
+            ;;
+        gitea)
+            ;;
+        drone)
+            ;;
+        clash)
+            setup_clash
+            ;;
+        u3dacc)
+            ;;
+        *)
+            ;;
+        esac
+    done
+    
     echo
+    color_msg y 'leave services_setup'
 }
 
 function services_start() {
+    local target_service=${1:-''}
+
+    color_msg y 'enter services_start'
     echo
-    echo 'enter services_start'
 
     yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
+        if [[ -n $target_service && $target_service != $service ]]; then
+            continue
+        fi
+
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
         local start=`yq e ".services.$service.start" $root_ws/dats.yml`
 
         if (( 0 == $enable || 0 == $start )); then
-            echo "$service disabled or distart"
+            color_msg r "$service disabled or distart"
             continue
         fi
 
         if [[ ! -d $host_ws/$service ]]; then
-            echo "$service do not exist"
+            color_msg r "$service do not exist"
             continue
         fi
 
         pushd $host_ws/$service 1>/dev/null 2>&1
 
-        docker-compose up -d
+        is_service_running $service
+        if (( 0 == $? )); then
+            docker-compose up -d
+        fi
 
         popd 1>/dev/null 2>&1
     done
 
-    echo 'leave services_start'
     echo
+    color_msg y 'leave services_start'
 }
 
 function services_stop() {
+    local target_service=${1:-''}
+
+    color_msg y 'enter services_stop'
     echo
-    echo 'enter services_stop'
 
     yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
+        if [[ -n $target_service && $target_service != $service ]]; then
+            continue
+        fi
+
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
         local start=`yq e ".services.$service.start" $root_ws/dats.yml`
 
         if (( 0 == $enable || 0 == $start )); then
-            echo "$service disabled or distart"
+            color_msg r "$service disabled or distart"
             continue
         fi
 
         if [[ ! -d $host_ws/$service ]]; then
-            echo "$service do not exist"
+            color_msg r "$service do not exist"
             continue
         fi
 
         pushd $host_ws/$service 1>/dev/null 2>&1
 
-        docker-compose down
+        is_service_running $service
+        if (( 1 == $? )); then
+            docker-compose down
+        fi
 
         popd 1>/dev/null 2>&1
     done
 
-    echo 'leave services_stop'
     echo
+    color_msg y 'leave services_stop'
+}
+
+function services_restart() {
+    local target_service=`select_service`
+    services_stop $target_service && \
+    services_setup $target_service && \
+    services_start $target_service
 }
 
 $exec_cmd
