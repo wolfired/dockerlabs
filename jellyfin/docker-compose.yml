@@ -1,0 +1,33 @@
+version: "3"
+
+networks:
+  default:
+    external: true
+    name: lanet
+
+services:
+  {{.name}}:
+    image: jellyfin/jellyfin
+    container_name: {{.name}}
+    restart: always
+    environment:
+      TZ:
+    volumes:
+    - {{host_ws}}/{{.name}}/config:/config
+    - {{host_ws}}/{{.name}}/cache:/cache
+    - {{host_ws}}/{{.name}}/media/film:/media/film
+    - {{host_ws}}/{{.name}}/media/music:/media/mucic
+    - {{host_ws}}/{{.name}}/media/book:/media/book
+    - {{host_ws}}/{{.name}}/media/photo:/media/photo
+    - {{host_ws}}/{{.name}}/media/tv:/media/tv
+    - {{host_ws}}/{{.name}}/media/mv:/media/mv
+    - {{host_ws}}/{{.name}}/media/other:/media/other:ro
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    dns:
+    - {{guest_dns_ip}}
+    networks:
+      default:
+        ipv4_address: {{.ip}}
+    # ports:
+    # - "{{.ports.web.host}}:{{.ports.web.guest}}"
