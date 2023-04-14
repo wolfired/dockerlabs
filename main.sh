@@ -91,7 +91,7 @@ function setup_nginx() {
     color_msg y 'enter setup_nginx'
     echo
 
-    local target_service=nginx
+    local target_service=nginx # 定制服务名
 
     local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
     if (( 0 == $enable )); then
@@ -99,6 +99,7 @@ function setup_nginx() {
         return
     fi
 
+    # 定制内容开始
     yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
         if [[ $target_service == $service ]]; then
             continue
@@ -142,6 +143,7 @@ function setup_nginx() {
             popd 1>/dev/null 2>&1
         done
     done
+    # 定制内容结束
 
     echo
     color_msg y 'leave setup_nginx'
@@ -152,7 +154,7 @@ function setup_clash() {
     color_msg y 'enter setup_clash'
     echo
 
-    local target_service=clash
+    local target_service=clash # 定制服务名
 
     local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
     if (( 0 == $enable )); then
@@ -162,6 +164,7 @@ function setup_clash() {
 
     pushd $host_ws/$target_service 1>/dev/null 2>&1
 
+    # 定制内容开始
     if [[ ! -d $host_ws/$target_service/yacd ]]; then
         git clone --depth 1 https://github.com/haishanh/yacd.git
     fi
@@ -179,11 +182,65 @@ function setup_clash() {
     else
         echo "Maybe you need setup IKUUU_URL"
     fi
+    # 定制内容结束
 
     popd 1>/dev/null 2>&1
 
     echo
     color_msg y 'leave setup_clash'
+}
+
+function setup_jellyfin() {
+    echo
+    color_msg y 'enter setup_jellyfin'
+    echo
+
+    local target_service=jellyfin # 定制服务名
+
+    local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
+    if (( 0 == $enable )); then
+        echo "$target_service disabled"
+        return
+    fi
+
+    pushd $host_ws/$target_service 1>/dev/null 2>&1
+
+    # 定制内容开始
+    mkdir -p $host_ws/$target_service/config
+    mkdir -p $host_ws/$target_service/cache
+    mkdir -p $host_ws/$target_service/media/{film,music,book,photo,tv,mv,other}
+    # 定制内容结束
+
+    popd 1>/dev/null 2>&1
+
+    echo
+    color_msg y 'leave setup_jellyfin'
+}
+
+function setup_sourcegraph() {
+    echo
+    color_msg y 'enter setup_sourcegraph'
+    echo
+
+    local target_service=sourcegraph # 定制服务名
+
+    local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
+    if (( 0 == $enable )); then
+        echo "$target_service disabled"
+        return
+    fi
+
+    pushd $host_ws/$target_service 1>/dev/null 2>&1
+
+    # 定制内容开始
+    mkdir -p $host_ws/$target_service/config
+    mkdir -p $host_ws/$target_service/data
+    # 定制内容结束
+
+    popd 1>/dev/null 2>&1
+
+    echo
+    color_msg y 'leave setup_sourcegraph'
 }
 
 function services_setup() {
@@ -198,6 +255,8 @@ function services_setup() {
         if [[ -n $target_service && $target_service != $service ]]; then
             continue
         fi
+
+        echo
 
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
 
@@ -273,6 +332,12 @@ function services_setup() {
             ;;
         u3dacc)
             ;;
+        jellyfin)
+            setup_jellyfin
+            ;;
+        sourcegraph)
+            setup_sourcegraph
+            ;;
         *)
             ;;
         esac
@@ -292,6 +357,8 @@ function services_start() {
         if [[ -n $target_service && $target_service != $service ]]; then
             continue
         fi
+
+        echo
 
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
         local start=`yq e ".services.$service.start" $root_ws/dats.yml`
@@ -330,6 +397,8 @@ function services_stop() {
         if [[ -n $target_service && $target_service != $service ]]; then
             continue
         fi
+
+        echo
 
         local enable=`yq e ".services.$service.enable" $root_ws/dats.yml`
         local start=`yq e ".services.$service.start" $root_ws/dats.yml`

@@ -9,6 +9,7 @@
   192.168.100.168 jenkins.wolfired.com
   192.168.100.168 onedev.wolfired.com
   192.168.100.168 jellyfin.wolfired.com
+  192.168.100.168 sourcegraph.wolfired.com
 
   fallthrough
  }
