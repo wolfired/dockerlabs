@@ -113,3 +113,15 @@ services:
       web:
         guest: 8096
         host: 8096
+  sourcegraph:
+    enable: 0
+    start: 0
+    name: 'sourcegraph'
+    ip: '192.168.1.12'
+    ports:
+      web:
+        guest: 7080
+        host: 7080
+      grafana:
+        guest: 3370
+        host: 3370
