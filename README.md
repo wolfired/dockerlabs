@@ -6,6 +6,16 @@ dockerlabs
 # 创建网络
 sudo docker network create --gateway 192.168.1.1 --subnet 192.168.1.0/24 lanet
 
+# Docker使用代理
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo touch /etc/systemd/system/docker.service.d/proxy.conf
+cat <<EOF >> /etc/systemd/system/docker.service.d/proxy.conf
+[Service]
+Environment="HTTP_PROXY=http://192.168.73.140:1080/"
+Environment="HTTPS_PROXY=http://192.168.73.140:1080/"
+Environment="NO_PROXY=localhost,127.0.0.1,192.168.73.0/24,192.168.100.0/24"
+EOF 
+
 # Linux
 sudo -E bash `pwd`/main.sh $HOME/workspace_docker `ip -o route get to 223.5.5.5 | grep -oP '(?<=src )\d+\.\d+\.\d+\.\d+'`
 
