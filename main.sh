@@ -243,6 +243,31 @@ function setup_sourcegraph() {
     color_msg y 'leave setup_sourcegraph'
 }
 
+function setup_resilio() {
+    echo
+    color_msg y 'enter setup_resilio'
+    echo
+
+    local target_service=resilio # 定制服务名
+
+    local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
+    if (( 0 == $enable )); then
+        echo "$target_service disabled"
+        return
+    fi
+
+    pushd $host_ws/$target_service 1>/dev/null 2>&1
+
+    # 定制内容开始
+    mkdir -p $host_ws/$target_service
+    # 定制内容结束
+
+    popd 1>/dev/null 2>&1
+
+    echo
+    color_msg y 'leave setup_resilio'
+}
+
 function services_setup() {
     local target_service=${1:-''}
 
@@ -337,6 +362,9 @@ function services_setup() {
             ;;
         sourcegraph)
             setup_sourcegraph
+            ;;
+        resilio)
+            setup_resilio
             ;;
         *)
             ;;

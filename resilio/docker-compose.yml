@@ -1,0 +1,25 @@
+version: "3"
+
+networks:
+  default:
+    external: true
+    name: lanet
+
+services:
+  {{.name}}:
+    container_name: {{.name}}
+    image: resilio/sync
+    restart: always
+    user: 0:0
+    environment:
+      TZ:
+      JAVA_OPTS:
+    volumes:
+    - {{host_ws}}/{{.name}}:/mnt/sync
+    dns:
+    - {{guest_dns_ip}}
+    networks:
+      default:
+        ipv4_address: {{.ip}}
+    ports:
+    - "{{.ports.traffic.host}}:{{.ports.traffic.guest}}"
