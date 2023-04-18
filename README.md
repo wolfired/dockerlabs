@@ -16,6 +16,9 @@ Environment="HTTPS_PROXY=http://192.168.73.140:1080/"
 Environment="NO_PROXY=localhost,127.0.0.1,192.168.73.0/24,192.168.100.0/24"
 EOF 
 
+# 依赖go-yq
+sudo pacman -S go-yq
+
 # Linux
 sudo -E bash `pwd`/main.sh $HOME/workspace_docker `ip -o route get to 223.5.5.5 | grep -oP '(?<=src )\d+\.\d+\.\d+\.\d+'`
 
