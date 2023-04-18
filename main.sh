@@ -127,19 +127,24 @@ function setup_nginx() {
         replace_service_cfg $service $host_ws/$target_service/conf/conf.d/$service.conf
     done
 
+    replace_service_cfg $target_service $host_ws/$target_service/conf/conf.d/default.conf
+
     mkdir -p $host_ws/$target_service/html/share
 
     mkdir -p $host_ws/$target_service/conf/encrypt/archive
     find $host_ws/$target_service/conf/encrypt/archive -mindepth 1 -maxdepth 1 -print | while read -r line; do
         local dir_name=`basename $line`
-        mkdir -p $host_ws/$target_service/conf/encrypt/live/$dir_name
+        local dir_name_without_num=`echo $dir_name | grep -oP '[a-z\.]+'`
+
+        mkdir -p $host_ws/$target_service/conf/encrypt/live/$dir_name_without_num
 
         local ssl_files=(cert chain fullchain privkey)
         for ssl_file in ${ssl_files[@]}; do
-            local target_name=$(basename `ls -c $line/$ssl_file* | head -n 1` | grep -oP '[a-z\d]+?(?=\.)' | grep -oP '[a-z]+')
+            local target_name=$(basename `ls -c $line/ | grep -P ^$ssl_file | tail -n 1` | grep -oP '[a-z0-9]+?(?=\.)')
+            local target_name_without_num=`echo $target_name | grep -oP '[a-z]+'`
 
-            pushd $host_ws/$target_service/conf/encrypt/live/$dir_name 1>/dev/null 2>&1 && \
-            ln -sf ../../archive/$dir_name/$(basename `ls -c $line/$ssl_file* | head -n 1` | grep -oP '[a-z\d]+?(?=\.)').pem $host_ws/$target_service/conf/encrypt/live/$dir_name/$target_name.pem && \
+            pushd $host_ws/$target_service/conf/encrypt/live/$dir_name_without_num 1>/dev/null 2>&1 && \
+            ln -sf ../../archive/$dir_name/$target_name.pem $host_ws/$target_service/conf/encrypt/live/$dir_name_without_num/$target_name_without_num.pem && \
             popd 1>/dev/null 2>&1
         done
     done
