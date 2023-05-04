@@ -1,7 +1,7 @@
 services:
   coredns:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'coredns'
     ip: '192.168.1.2'
     domain: 'wolfired'
@@ -16,8 +16,8 @@ services:
         guest: 5300
         host: 5300
   nginx:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'nginx'
     ip: '192.168.1.3'
     domain: 'wolfired'
@@ -29,8 +29,8 @@ services:
         guest: 443
         host: 443
   gitea:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'gitea'
     ip: '192.168.1.4'
     domain: 'wolfired'
@@ -42,8 +42,8 @@ services:
         guest: 22
         host: 22
   drone:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'drone'
     ip: '192.168.1.5'
     domain: 'wolfired'
@@ -52,8 +52,8 @@ services:
         guest: 80
         host: 1500
   clash:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'clash'
     ip: '192.168.1.6'
     domain: 'wolfired'
@@ -65,8 +65,8 @@ services:
         guest: 1080
         host: 1080
   jenkins:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'jenkins'
     ip: '192.168.1.7'
     domain: 'wolfired'
@@ -78,8 +78,8 @@ services:
         guest: 1701
         host: 1701
   u3dacc:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'u3dacc'
     ip: '192.168.1.8'
     domain: 'wolfired'
@@ -91,8 +91,8 @@ services:
         guest: 10080
         host: 10080
   drone_runner:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'drone_runner'
     ip: '192.168.1.9'
     domain: 'wolfired'
@@ -101,8 +101,8 @@ services:
         guest: 1900
         host: 1900
   onedev:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'onedev'
     ip: '192.168.1.10'
     domain: 'wolfired'
@@ -114,8 +114,8 @@ services:
         guest: 6611
         host: 6611
   jellyfin:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'jellyfin'
     ip: '192.168.1.11'
     domain: 'wolfired'
@@ -124,8 +124,8 @@ services:
         guest: 8096
         host: 8096
   sourcegraph:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'sourcegraph'
     ip: '192.168.1.12'
     domain: 'wolfired'
@@ -137,8 +137,8 @@ services:
         guest: 3370
         host: 3370
   resilio:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'resilio'
     ip: '192.168.1.13'
     domain: 'wolfired'
