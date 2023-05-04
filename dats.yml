@@ -5,6 +5,7 @@ services:
     name: 'coredns'
     ip: '192.168.1.2'
     domain: 'wolfired'
+    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">CoreDNS Health</a></li>'
     ports:
       udp:
         guest: 53
@@ -21,6 +22,7 @@ services:
     name: 'nginx'
     ip: '192.168.1.3'
     domain: 'wolfired'
+    li: '<li><a href="https://help.{{domain}}.com/share">Share</a></li>'
     ports:
       http:
         guest: 80
@@ -34,6 +36,7 @@ services:
     name: 'gitea'
     ip: '192.168.1.4'
     domain: 'wolfired'
+    li: ''
     ports:
       web:
         guest: 3000
@@ -47,6 +50,7 @@ services:
     name: 'drone'
     ip: '192.168.1.5'
     domain: 'wolfired'
+    li: ''
     ports:
       web:
         guest: 80
@@ -57,6 +61,7 @@ services:
     name: 'clash'
     ip: '192.168.1.6'
     domain: 'wolfired'
+    li: '<li><a href="https://{{name}}.{{domain}}.com/ui" target="_blank">Clash</a></li>'
     ports:
       web:
         guest: 80
@@ -70,6 +75,7 @@ services:
     name: 'jenkins'
     ip: '192.168.1.7'
     domain: 'wolfired'
+    li: ''
     ports:
       web:
         guest: 8080
@@ -83,6 +89,7 @@ services:
     name: 'u3dacc'
     ip: '192.168.1.8'
     domain: 'wolfired'
+    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">Unity Accelerator</a></li>'
     ports:
       web:
         guest: 80
@@ -96,6 +103,7 @@ services:
     name: 'drone_runner'
     ip: '192.168.1.9'
     domain: 'wolfired'
+    li: ''
     ports:
       web:
         guest: 1900
@@ -106,6 +114,7 @@ services:
     name: 'onedev'
     ip: '192.168.1.10'
     domain: 'wolfired'
+    li: ''
     ports:
       web:
         guest: 6610
@@ -119,6 +128,7 @@ services:
     name: 'jellyfin'
     ip: '192.168.1.11'
     domain: 'wolfired'
+    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">Jellyfin</a></li>'
     ports:
       web:
         guest: 8096
@@ -129,6 +139,7 @@ services:
     name: 'sourcegraph'
     ip: '192.168.1.12'
     domain: 'wolfired'
+    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">Sourcegraph</a></li>'
     ports:
       web:
         guest: 7080
@@ -142,6 +153,7 @@ services:
     name: 'resilio'
     ip: '192.168.1.13'
     domain: 'wolfired'
+    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">Resilio</a></li>'
     ports:
       web:
         guest: 8888

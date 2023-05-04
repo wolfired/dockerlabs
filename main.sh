@@ -86,6 +86,39 @@ function get_guest_dns_ip() {
     yq e '.services.coredns.ip' $root_ws/dats.yml
 }
 
+function gen_index() {
+    local index=${1:?'请指定Index'}
+
+cat <<< `
+
+echo '<html>
+    <head></head>
+    <body>
+        <h1>Tada ...</h1>
+        <table>'
+
+yq e '.services.*.name' $root_ws/dats.yml | while read -r service; do
+    local enable=$(yq e ".services.$service.enable" $root_ws/dats.yml)
+    local start=$(yq e ".services.$service.start" $root_ws/dats.yml)
+    local name=$(yq e ".services.$service.name" $root_ws/dats.yml)
+    local domain=$(yq e ".services.$service.domain" $root_ws/dats.yml)
+    local li=$(yq e ".services.$service.li" $root_ws/dats.yml)
+    if (( 0 == $enable || 0 == $start )) || [[ ! -n $li ]]; then
+        continue
+    fi
+    echo "            $li" | sed "s#{{name}}#$name#g" | sed "s#{{domain}}#$domain#g"
+done
+
+echo '        </table>
+    </body>
+</html>
+
+'
+
+` > $index
+
+}
+
 function setup_nginx() {
     echo
     color_msg y 'enter setup_nginx'
@@ -148,6 +181,9 @@ function setup_nginx() {
             popd 1>/dev/null 2>&1
         done
     done
+
+    gen_index $host_ws/$target_service/html/index.html
+
     # 定制内容结束
 
     echo
