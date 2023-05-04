@@ -114,7 +114,7 @@ services:
     name: 'onedev'
     ip: '192.168.1.10'
     domain: 'wolfired'
-    li: ''
+    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">OneDev Server</a></li>'
     ports:
       web:
         guest: 6610
