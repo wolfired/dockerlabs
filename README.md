@@ -19,12 +19,17 @@ Environment="HTTPS_PROXY=http://192.168.73.140:1080/"
 Environment="NO_PROXY=localhost,127.0.0.1,192.168.73.0/24,192.168.100.0/24"
 EOF 
 
-# 改变enable, start
-sed -i "s#\(enable: \).*#\10#g" ./dats.yml
-sed -i "s#\(start: \).*#\10#g" ./dats.yml
+# unset enable, start
+sed -i "s#\(enable: \).*#\10#g" ./dats.yml && sed -i "s#\(start: \).*#\10#g" ./dats.yml
 
-# 改变domain
+# set enable, start
+sed -i "s#\(enable: \).*#\11#g" ./dats.yml && sed -i "s#\(start: \).*#\11#g" ./dats.yml
+
+# set domain to vyorz
 sed -i "s#\(domain: '\).*\('\)#\1vyorz\2#g" ./dats.yml
+
+# set domain to wolfired
+sed -i "s#\(domain: '\).*\('\)#\1wolfired\2#g" ./dats.yml
 
 # Linux
 sudo -E bash `pwd`/main.sh $HOME/workspace_docker `ip -o route get to 223.5.5.5 | grep -oP '(?<=src )\d+\.\d+\.\d+\.\d+'`

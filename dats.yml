@@ -29,8 +29,8 @@ services:
         guest: 443
         host: 443
   gitea:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'gitea'
     ip: '192.168.1.4'
     domain: 'wolfired'
@@ -42,8 +42,8 @@ services:
         guest: 22
         host: 22
   drone:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'drone'
     ip: '192.168.1.5'
     domain: 'wolfired'
@@ -65,8 +65,8 @@ services:
         guest: 1080
         host: 1080
   jenkins:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'jenkins'
     ip: '192.168.1.7'
     domain: 'wolfired'
@@ -91,8 +91,8 @@ services:
         guest: 10080
         host: 10080
   drone_runner:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'drone_runner'
     ip: '192.168.1.9'
     domain: 'wolfired'
@@ -114,8 +114,8 @@ services:
         guest: 6611
         host: 6611
   jellyfin:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'jellyfin'
     ip: '192.168.1.11'
     domain: 'wolfired'
@@ -124,8 +124,8 @@ services:
         guest: 8096
         host: 8096
   sourcegraph:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'sourcegraph'
     ip: '192.168.1.12'
     domain: 'wolfired'
@@ -137,8 +137,8 @@ services:
         guest: 3370
         host: 3370
   resilio:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'resilio'
     ip: '192.168.1.13'
     domain: 'wolfired'
