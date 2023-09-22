@@ -173,7 +173,7 @@ function setup_nginx() {
 
         local ssl_files=(cert chain fullchain privkey)
         for ssl_file in ${ssl_files[@]}; do
-            local target_name=$(basename `ls -c $line/ | grep -P ^$ssl_file | tail -n 1` | grep -oP '[a-z0-9]+?(?=\.)')
+            local target_name=$(basename `ls -c $line/ | grep -P ^$ssl_file | sort | tail -n 1` | grep -oP '[a-z0-9]+?(?=\.)')
             local target_name_without_num=`echo $target_name | grep -oP '[a-z]+'`
 
             pushd $host_ws/$target_service/conf/encrypt/live/$dir_name_without_num 1>/dev/null 2>&1 && \
