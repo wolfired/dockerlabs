@@ -49,7 +49,7 @@ apt install subversion
 
 # outside onedev container
 sudo docker commit 'Change to your CONTAINER ID'
-sudo docker tag 'Change to your CONTAINER ID' 1dev/server:svn
+sudo docker tag 'Change to your IMAGE ID' 1dev/server:svn
 
 ```
 
