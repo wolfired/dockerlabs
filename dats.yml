@@ -1,11 +1,11 @@
 services:
   coredns:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'coredns'
     ip: '192.168.1.2'
-    domain: 'wolfired'
-    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">CoreDNS Health</a></li>'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">CoreDNS Health</a></li>'
     ports:
       udp:
         guest: 53
@@ -17,12 +17,12 @@ services:
         guest: 5300
         host: 5300
   nginx:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'nginx'
     ip: '192.168.1.3'
-    domain: 'wolfired'
-    li: '<li><a href="https://help.{{domain}}.com/share">Share</a></li>'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://help.{{domain}}/share">Share</a></li>'
     ports:
       http:
         guest: 80
@@ -35,7 +35,7 @@ services:
     start: 0
     name: 'gitea'
     ip: '192.168.1.4'
-    domain: 'wolfired'
+    domain: 'wolfired.com'
     li: ''
     ports:
       web:
@@ -49,19 +49,19 @@ services:
     start: 0
     name: 'drone'
     ip: '192.168.1.5'
-    domain: 'wolfired'
+    domain: 'wolfired.com'
     li: ''
     ports:
       web:
         guest: 80
         host: 1500
   clash:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'clash'
     ip: '192.168.1.6'
-    domain: 'wolfired'
-    li: '<li><a href="https://{{name}}.{{domain}}.com/ui" target="_blank">Clash</a></li>'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}/ui" target="_blank">Clash</a></li>'
     ports:
       web:
         guest: 80
@@ -74,7 +74,7 @@ services:
     start: 0
     name: 'jenkins'
     ip: '192.168.1.7'
-    domain: 'wolfired'
+    domain: 'wolfired.com'
     li: ''
     ports:
       web:
@@ -84,12 +84,12 @@ services:
         guest: 1701
         host: 1701
   u3dacc:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'u3dacc'
     ip: '192.168.1.8'
-    domain: 'wolfired'
-    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">Unity Accelerator</a></li>'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">Unity Accelerator</a></li>'
     ports:
       web:
         guest: 80
@@ -102,19 +102,19 @@ services:
     start: 0
     name: 'drone_runner'
     ip: '192.168.1.9'
-    domain: 'wolfired'
+    domain: 'wolfired.com'
     li: ''
     ports:
       web:
         guest: 1900
         host: 1900
   onedev:
-    enable: 0
-    start: 0
+    enable: 1
+    start: 1
     name: 'onedev'
     ip: '192.168.1.10'
-    domain: 'wolfired'
-    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">OneDev Server</a></li>'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">OneDev Server</a></li>'
     ports:
       web:
         guest: 6610
@@ -127,8 +127,8 @@ services:
     start: 0
     name: 'jellyfin'
     ip: '192.168.1.11'
-    domain: 'wolfired'
-    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">Jellyfin</a></li>'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">Jellyfin</a></li>'
     ports:
       web:
         guest: 8096
@@ -138,8 +138,8 @@ services:
     start: 0
     name: 'sourcegraph'
     ip: '192.168.1.12'
-    domain: 'wolfired'
-    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">Sourcegraph</a></li>'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">Sourcegraph</a></li>'
     ports:
       web:
         guest: 7080
@@ -152,8 +152,8 @@ services:
     start: 0
     name: 'resilio'
     ip: '192.168.1.13'
-    domain: 'wolfired'
-    li: '<li><a href="https://{{name}}.{{domain}}.com" target="_blank">Resilio</a></li>'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">Resilio</a></li>'
     ports:
       web:
         guest: 8888
@@ -161,3 +161,14 @@ services:
       traffic:
         guest: 55555
         host: 55555
+  glitchtip:
+    enable: 1
+    start: 1
+    name: 'glitchtip'
+    ip: '192.168.1.14'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">GlitchTip</a></li>'
+    ports:
+      web:
+        guest: 8000
+        host: 8000

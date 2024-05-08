@@ -309,6 +309,34 @@ function setup_resilio() {
     color_msg y 'leave setup_resilio'
 }
 
+function setup_glitchtip() {
+    echo
+    color_msg y 'enter setup_glitchtip'
+    echo
+
+    local target_service=glitchtip # 定制服务名
+
+    local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
+    if (( 0 == $enable )); then
+        echo "$target_service disabled"
+        return
+    fi
+
+    pushd $host_ws/$target_service 1>/dev/null 2>&1
+
+    # 定制内容开始
+    mkdir -p $host_ws/$target_service/pg_data
+    mkdir -p $host_ws/$target_service/uploads
+    local secret_key=`openssl rand -hex 32`
+    sed -i "s#{{secret_key}}#$secret_key#" $host_ws/$service/docker-compose.yml
+    # 定制内容结束
+
+    popd 1>/dev/null 2>&1
+
+    echo
+    color_msg y 'leave setup_glitchtip'
+}
+
 function services_setup() {
     local target_service=${1:-''}
 
@@ -362,6 +390,8 @@ function services_setup() {
             ;;
         u3dacc)
             ;;
+        glitchtip)
+            ;;
         *)
             ;;
         esac
@@ -406,6 +436,9 @@ function services_setup() {
             ;;
         resilio)
             setup_resilio
+            ;;
+        glitchtip)
+            setup_glitchtip
             ;;
         *)
             ;;
