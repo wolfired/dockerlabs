@@ -13,6 +13,7 @@
   192.168.100.168 resilio.wolfired.com
   192.168.100.168 glitchtip.wolfired.com
   192.168.100.168 slg2.wolfired.com
+  192.168.100.49 admin.sg2.dev.com
 
   fallthrough
  }
