@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   unity_2021_2_7f1_windows_mono_0_15_0:
     container_name: unity
