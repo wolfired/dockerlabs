@@ -162,8 +162,8 @@ services:
         guest: 55555
         host: 55555
   glitchtip:
-    enable: 1
-    start: 1
+    enable: 0
+    start: 0
     name: 'glitchtip'
     ip: '192.168.1.14'
     domain: 'wolfired.com'
