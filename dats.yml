@@ -172,3 +172,17 @@ services:
       web:
         guest: 8000
         host: 8000
+  vaultwarden:
+    enable: 1
+    start: 1
+    name: 'vaultwarden'
+    ip: '192.168.1.15'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">Vaultwarden</a></li>'
+    ports:
+      web:
+        guest: 80
+        host: 8001
+      serv:
+        guest: 3012
+        host: 3012

@@ -1,0 +1,26 @@
+networks:
+  default:
+    external: true
+    name: lanet
+
+services:
+  {{.name}}:
+    container_name: {{.name}}
+    image: vaultwarden/server:latest
+    restart: always
+    user: 0:0
+    environment:
+      TZ:
+      DOMAIN:
+      SIGNUPS_ALLOWED:
+      ADMIN_TOKEN:
+    volumes:
+    - {{host_ws}}/{{.name}}/vw-data/:/data/
+    dns:
+    - {{guest_dns_ip}}
+    networks:
+      default:
+        ipv4_address: {{.ip}}
+    ports:
+    - "{{.ports.web.host}}:{{.ports.web.guest}}"
+    - "{{.ports.serv.host}}:{{.ports.serv.guest}}"
