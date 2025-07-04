@@ -11,7 +11,7 @@ services:
     environment:
       TZ:
     volumes:
-    - {{host_ws}}/{{.name}}/html:/usr/share/nginx/html:ro
+    - {{host_ws}}/{{.name}}/html:/usr/share/nginx/html
     - {{host_ws}}/{{.name}}/conf:/etc/nginx:ro
     dns:
     - {{guest_dns_ip}}
