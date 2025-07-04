@@ -36,6 +36,19 @@ sudo -E bash `pwd`/main.sh $HOME/workspace_docker `ip -o route get to 223.5.5.5 
 
 ```
 
+```bash
+
+# 安装密码生成工具
+yay -S apache-tools
+
+# 生成密码
+htpasswd -c ./nginx/conf/passwd guest
+
+# 文件上传
+curl -u guest -X PUT -T ./README.md https://help.wolfired.com/share/
+
+```
+
 # Onedev安装svn
 
 ```bash 
