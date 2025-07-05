@@ -22,7 +22,7 @@ services:
     name: 'nginx'
     ip: '192.168.1.3'
     domain: 'wolfired.com'
-    li: '<li><a href="https://help.{{domain}}/share">Share</a></li>'
+    li: '<li><a href="https://help.{{domain}}/download/">Download</a></li>'
     ports:
       http:
         guest: 80
