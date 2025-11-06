@@ -1,0 +1,23 @@
+networks:
+  default:
+    external: true
+    name: lanet
+
+services:
+  {{.name}}:
+    container_name: {{.name}}
+    image: owncast/owncast:latest
+    restart: always
+    user: 0:0
+    environment:
+      TZ:
+    volumes:
+    - {{host_ws}}/{{.name}}/data:/app/data
+    dns:
+    - {{guest_dns_ip}}
+    networks:
+      default:
+        ipv4_address: {{.ip}}
+    ports:
+    - "{{.ports.web.host}}:{{.ports.web.guest}}"
+    - "{{.ports.rtmp.host}}:{{.ports.rtmp.guest}}"
