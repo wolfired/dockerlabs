@@ -5,6 +5,12 @@ dockerlabs
 
 # 创建网络
 sudo docker network create --gateway 192.168.1.1 --subnet 192.168.1.0/24 lanet
+sudo docker network create -d macvlan \
+--subnet 192.168.1.0/24 \
+--gateway 192.168.1.1 \
+--ip-range 192.168.1.240/28 \
+-o parent=ens18 \
+macvlanet
 
 # 依赖go-yq
 sudo pacman -S go-yq
@@ -65,4 +71,3 @@ sudo docker commit 'Change to your CONTAINER ID'
 sudo docker tag 'Change to your IMAGE ID' 1dev/server:svn
 
 ```
-
