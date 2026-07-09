@@ -220,5 +220,5 @@ services:
     li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">Immich</a></li>'
     ports:
       web:
-        guest: 4001
-        host: 4001
+        guest: 2283
+        host: 2283
