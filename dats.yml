@@ -200,3 +200,16 @@ services:
       rtmp:
         guest: 1935
         host: 1935
+  photoview:
+    enable: 0
+    start: 0
+    name: 'photoview'
+    ip: '192.168.1.17'
+    domain: 'wolfired.com'
+    li: '<li><a href="https://{{name}}.{{domain}}" target="_blank">Photoview</a></li>'
+    ports:
+      web:
+        guest: 4001
+        host: 4001
+
+        

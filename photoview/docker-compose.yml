@@ -1,0 +1,52 @@
+networks:
+  default:
+    external: true
+    name: lanet
+
+services:
+  {{.name}}:
+    hostname: {{.name}}
+    container_name: {{.name}}
+    image: photoview/photoview:2
+    restart: always
+    user: 0:0
+    stop_grace_period: 10s
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    environment:
+      TZ:
+      PHOTOVIEW_DATABASE_DRIVER: 
+      PHOTOVIEW_SQLITE_PATH: 
+      PHOTOVIEW_LISTEN_IP: 
+      PHOTOVIEW_LISTEN_PORT: 
+      ## Optional: To enable map related features, you need to create a mapbox token.
+      ## A token can be generated for free here https://account.mapbox.com/access-tokens/
+      ## It's a good idea to limit the scope of the token to your own domain, to prevent others from using it.
+      MAPBOX_TOKEN: 
+    volumes:
+      ## Example:
+      ## - "/host/folder:/container/folder"
+      - "/etc/localtime:/etc/localtime:ro" ## use local time from host
+      - "/etc/timezone:/etc/timezone:ro" ## use timezone from host
+      ## Uncomment the next line if PHOTOVIEW_DATABASE_DRIVER is set to `sqlite` in the .env
+      - "{{host_ws}}/{{.name}}/database:/home/photoview/database"
+      - "{{host_ws}}/{{.name}}/storage:/home/photoview/media-cache"
+      ## Change This in the .env file: to the directory where your photos are located on your server.
+      ## You can mount multiple paths if your photos are spread across multiple directories.
+      ## The same path as the container path set here, you'll need to provide on the Photoview's init page (the one between the ':' chars).
+      ## If you mount several folders, provide the path to the parent one on the init page.
+      ## If you mount several folders, make sure that there are no direct mappings to the media root folder.
+      ## This means that you need to also modify the container path of the HOST_PHOTOVIEW_MEDIA_ROOT
+      ## to something like '/photos/main'. Note that this new name ('main' in this example) will become an album in Photoview.
+      - "{{host_ws}}/{{.name}}/photos:/photos:ro"
+      ## *Additional* media folders can be mounted like this (set the variable in .env file)
+      ## Note that a mount cannot be located in a subfolder of another mount.
+      # - "${HOST_PHOTOVIEW_MEDIA_FAMILY}:/photos/Family:ro"
+    dns:
+    - {{guest_dns_ip}}
+    networks:
+      default:
+        ipv4_address: {{.ip}}
+    ports:
+    - "{{.ports.web.host}}:{{.ports.web.guest}}" ## HTTP port (host:container)
