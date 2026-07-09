@@ -364,6 +364,33 @@ function setup_photoview() {
     color_msg y 'leave setup_photoview'
 }
 
+function setup_immich() {
+    echo
+    color_msg y 'enter setup_immich'
+    echo
+
+    local target_service=immich # 定制服务名
+
+    local enable=`yq e ".services.$target_service.enable" $root_ws/dats.yml`
+    if (( 0 == $enable )); then
+        echo "$target_service disabled"
+        return
+    fi
+
+    pushd $host_ws/$target_service 1>/dev/null 2>&1
+
+    # 定制内容开始
+    mkdir -p $host_ws/$target_service/library
+    mkdir -p $host_ws/$target_service/postgres
+    mkdir -p $host_ws/$target_service/model_cache
+    # 定制内容结束
+
+    popd 1>/dev/null 2>&1
+
+    echo
+    color_msg y 'leave setup_immich'
+}
+
 function services_setup() {
     local target_service=${1:-''}
 
@@ -469,6 +496,9 @@ function services_setup() {
             ;;
         photoview)
             setup_photoview
+            ;;
+        immich)
+            setup_immich
             ;;
         *)
             ;;

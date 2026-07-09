@@ -16,6 +16,7 @@
   192.168.100.168 vaultwarden.wolfired.com
   192.168.100.168 owncast.wolfired.com
   192.168.100.168 photoview.wolfired.com
+  192.168.100.168 immich.wolfired.com
   192.168.100.49 admin.sg2.dev.com
 
   fallthrough
